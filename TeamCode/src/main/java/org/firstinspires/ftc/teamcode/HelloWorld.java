@@ -10,7 +10,7 @@ public class HelloWorld extends OpMode {
   @Override
   public void init(){
 
-        telemetry.addData("Hello:" , "World");
+        telemetry.addData("Hello" , "Everyone my name is markiplier");
 
     }
 
