@@ -22,9 +22,9 @@ public class Constants {
             .rightRearEncoderDirection(Encoder.REVERSE)
             .robotWidth(17.7165)
             .robotLength(17.7165)
-            .forwardTicksToInches()
-            .strafeTicksToInches()
-            .turnTicksToInches()
+            .forwardTicksToInches(1)
+            .strafeTicksToInches(1)
+            .turnTicksToInches(1);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
@@ -36,12 +36,12 @@ public class Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .xVelocity(velocity)//forward
-            .yVelocity(velocity)//sideways to the left
+            .xVelocity(1)//forward
+            .yVelocity(1);//sideways to the left
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass()
-            .forwardZeroPowerAcceleration(deceleration)
-            .lateralZeroPowerAcceleration(deceleration)
+            .mass(1)
+            .forwardZeroPowerAcceleration(1)
+            .lateralZeroPowerAcceleration(1);
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
