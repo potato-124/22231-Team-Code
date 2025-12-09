@@ -36,7 +36,7 @@ public class TeleOp1 extends OpMode {
             LBMotor = hardwareMap.get(DcMotor.class, "LB Motor");
             RBMotor = hardwareMap.get(DcMotor.class, "RB Motor");
             RFMotor = hardwareMap.get(DcMotor.class, "RF Motor");
-            Potato1 = hardwareMap.get(DcMotor.class, "Potato 1");
+            Potato1 = hardwareMap.get(DcMotor.class, "Potato1");
             Servo7 = hardwareMap.get(Servo.class, "Servo 7");
             Servo8 = hardwareMap.get(Servo.class, "Servo 8");
 
@@ -152,20 +152,20 @@ public class TeleOp1 extends OpMode {
             UpPressed = true;
 
         }
-        else {
+        else if (!gamepad1.dpad_up) {
             UpPressed = false;
         }
         if(gamepad1.dpad_down && !DownPressed){
             ShooterPower += 0.1;
             DownPressed = true;
         }
-        else
+        else if (!gamepad1.dpad_down)
         {DownPressed = false;}
         if(ShooterPower < -1)
         {ShooterPower = -1;}
         if(ShooterPower > 0)
         {ShooterPower = 0;}
-        if(gamepad1.leftBumperWasPressed())
+        if(gamepad1.right_bumper)
         {Potato1.setPower(ShooterPower);}
         else
         {Potato1.setPower(0);}

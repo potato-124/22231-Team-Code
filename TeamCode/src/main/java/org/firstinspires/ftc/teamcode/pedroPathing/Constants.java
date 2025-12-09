@@ -39,7 +39,7 @@ public class Constants {
             .xVelocity(1)//forward
             .yVelocity(1);//sideways to the left
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(1)
+            .mass(10)
             .forwardZeroPowerAcceleration(1)
             .lateralZeroPowerAcceleration(1);
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
