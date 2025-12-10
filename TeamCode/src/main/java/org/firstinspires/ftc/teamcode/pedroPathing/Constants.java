@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
+import com.pedropathing.control.FilteredPIDFCoefficients;
+import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
@@ -12,10 +14,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Constants {
     public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
-            .rightFrontMotorName("RFMotor")
-            .rightRearMotorName("RBMotor")
-            .leftRearMotorName("LBMotor")
-            .leftFrontMotorName("LFMotor")
+            .rightFrontMotorName("RF Motor")
+            .rightRearMotorName("RB Motor")
+            .leftRearMotorName("LB Motor")
+            .leftFrontMotorName("LF Motor")
             .leftFrontEncoderDirection(Encoder.FORWARD)
             .leftRearEncoderDirection(Encoder.FORWARD)
             .rightFrontEncoderDirection(Encoder.REVERSE)
