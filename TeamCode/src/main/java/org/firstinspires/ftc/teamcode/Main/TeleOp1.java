@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Main;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
@@ -10,11 +11,11 @@ import com.qualcomm.robotcore.util.Range;
 public class TeleOp1 extends OpMode {
 
     // Declare Motors and Servos
-    private DcMotor LFMotor;
-    private DcMotor LBMotor;
-    private DcMotor RBMotor;
-    private DcMotor RFMotor;
-    private DcMotor Potato1;
+    private DcMotorEx LFMotor;
+    private DcMotorEx LBMotor;
+    private DcMotorEx RBMotor;
+    private DcMotorEx RFMotor;
+    private DcMotorEx Potato1;
     private Servo Servo7;
     private Servo Servo8;
 
@@ -32,11 +33,11 @@ public class TeleOp1 extends OpMode {
 
         @Override
         public void init(){
-            LFMotor = hardwareMap.get(DcMotor.class, "LF Motor");
-            LBMotor = hardwareMap.get(DcMotor.class, "LB Motor");
-            RBMotor = hardwareMap.get(DcMotor.class, "RB Motor");
-            RFMotor = hardwareMap.get(DcMotor.class, "RF Motor");
-            Potato1 = hardwareMap.get(DcMotor.class, "Potato1");
+            LFMotor = hardwareMap.get(DcMotorEx.class, "LF Motor");
+            LBMotor = hardwareMap.get(DcMotorEx.class, "LB Motor");
+            RBMotor = hardwareMap.get(DcMotorEx.class, "RB Motor");
+            RFMotor = hardwareMap.get(DcMotorEx.class, "RF Motor");
+            Potato1 = hardwareMap.get(DcMotorEx.class, "Potato1");
             Servo7 = hardwareMap.get(Servo.class, "Servo 7");
             Servo8 = hardwareMap.get(Servo.class, "Servo 8");
 
@@ -108,6 +109,7 @@ public class TeleOp1 extends OpMode {
             telemetry.addData("Reverse Drive", "Off");
 
         }
+        telemetry.addData("Velocity", Potato1.getVelocity());
         telemetry.update();
     }
 //below is the Code controlling the ability to reverse directions
@@ -169,6 +171,7 @@ public class TeleOp1 extends OpMode {
         {Potato1.setPower(ShooterPower);}
         else
         {Potato1.setPower(0);}
+
     }
 }
 
