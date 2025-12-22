@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name = "TeleOp1")
+@TeleOp(name = "TeleOp2")
 public class TeleOp2 extends OpMode {
 
     // Declare Motors and Servos
@@ -26,12 +26,12 @@ public class TeleOp2 extends OpMode {
     //Declare Variables
     boolean ReverseDrive;
     float LeftStickY;
-    float RightStickY;
+    float LeftStickX;
     int Toggle;
     boolean CircleWasPressed;
     float RightStickX;
     double TargetVelocity;
-    double[] Velocity = {600, 900, 1500, 2100};
+    double[] Velocity = {400, 600, 900, 1500, 2100};
     int VelocityIndex = 1;
 
 
@@ -56,7 +56,7 @@ public class TeleOp2 extends OpMode {
         RFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Potato1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Potato1.setDirection(DcMotorSimple.Direction.REVERSE);
-        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(240.0, 0, 0, 15.8240);
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(240.0, 0, 0.5, 15.8240);
         Potato1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
 
 
@@ -67,17 +67,17 @@ public class TeleOp2 extends OpMode {
         DriveControl ();
         IntakeLogic ();
         Telemetry();
-        ShoterLogic();
+        ShooterLogic();
         Reverse_Drive();
 
 
     }
     //Below is what controls the driving mechanism
     private void DriveControl () {
-        LFMotor.setPower(Range.clip(LeftStickY - RightStickX, -1, 1));
-        LBMotor.setPower(Range.clip(LeftStickY + RightStickX, -1, 1));
-        RBMotor.setPower(Range.clip(RightStickY - RightStickX, -1, 1));
-        RFMotor.setPower(Range.clip(RightStickY + RightStickX, -1, 1));
+        LFMotor.setPower(Range.clip(LeftStickY - RightStickX + LeftStickX, -1, 1));
+        LBMotor.setPower(Range.clip(LeftStickY - RightStickX - LeftStickX,  -1, 1));
+        RBMotor.setPower(Range.clip(LeftStickY + RightStickX + LeftStickX,  -1, 1));
+        RFMotor.setPower(Range.clip(LeftStickY + RightStickX - LeftStickX,  -1, 1));
     }
 
     // Below is what controls the intake into the shooter and the reverse intake.
@@ -90,11 +90,11 @@ public class TeleOp2 extends OpMode {
             Servo8.setPosition(0.5);
         }
         if (gamepad1.triangle) {
-            Potato1.setPower(1);
+            Potato1.setVelocity(-600);
             Servo7.setPosition(1);
             Servo8.setPosition(-1);
         } else if (gamepad1.triangleWasReleased()) {
-            Potato1.setPower(0);
+            Potato1.setVelocity(0);
             Servo7.setPosition(0.5);
             Servo8.setPosition(0.5);
         }
@@ -121,15 +121,15 @@ public class TeleOp2 extends OpMode {
     //below is the Code controlling the ability to reverse directions
     private void Reverse_Drive(){
         if(ReverseDrive){
-            LeftStickY = -gamepad1.right_stick_y;
-            RightStickY = -gamepad1.left_stick_y;
-            RightStickX = -gamepad1.right_stick_x;
+            LeftStickY = -gamepad1.left_stick_y;
+            RightStickX = gamepad1.right_stick_x;
+            LeftStickX = -gamepad1.left_stick_x;
         }
         else {
 
             LeftStickY = gamepad1.left_stick_y;
-            RightStickY = gamepad1.right_stick_y;
             RightStickX = gamepad1.right_stick_x;
+            LeftStickX = gamepad1.left_stick_x;
         }
         if(gamepad1.circleWasReleased() && !CircleWasPressed){
             Toggle += 1;
@@ -154,16 +154,16 @@ public class TeleOp2 extends OpMode {
     }
 
     //Below is the code for controlling the Shooter
-    private void ShoterLogic(){
+    private void ShooterLogic(){
         if (gamepad1.dpadUpWasPressed()){
             VelocityIndex = (VelocityIndex + 1) % Velocity.length;
         }
         if (gamepad1.dpadDownWasPressed()){
-            VelocityIndex = (VelocityIndex - 1) % Velocity.length;
+            VelocityIndex = (VelocityIndex - 1 + Velocity.length) % Velocity.length;
         }
         TargetVelocity = Velocity[VelocityIndex];
 
-        if(gamepad1.rightBumperWasPressed()){
+        if(gamepad1.right_bumper){
             Potato1.setVelocity(TargetVelocity);
         }else {
             Potato1.setVelocity(0);

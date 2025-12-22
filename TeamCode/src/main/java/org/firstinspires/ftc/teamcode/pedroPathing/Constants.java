@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
-import com.pedropathing.control.FilteredPIDFCoefficients;
-import com.pedropathing.control.PIDFCoefficients;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
@@ -13,52 +11,49 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Constants {
-    public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
-            .rightFrontMotorName("RF Motor")
-            .rightRearMotorName("RB Motor")
-            .leftRearMotorName("LB Motor")
-            .leftFrontMotorName("LF Motor")
-            .leftFrontEncoderDirection(Encoder.FORWARD)
-            .leftRearEncoderDirection(Encoder.FORWARD)
-            .rightFrontEncoderDirection(Encoder.REVERSE)
-            .rightRearEncoderDirection(Encoder.REVERSE)
-            .robotWidth(17.7165)
-            .robotLength(17.7165)
-            .forwardTicksToInches(1)
-            .strafeTicksToInches(1)
-            .turnTicksToInches(1);
+    public static FollowerConstants followerConstants = new FollowerConstants()
+            .mass(9)
+            .forwardZeroPowerAcceleration(-67)
+            .lateralZeroPowerAcceleration(-120);
+
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
-            .rightFrontMotorName("LF Motor")
-            .rightRearMotorName("RB Motor")
-            .leftRearMotorName("LB Motor")
-            .leftFrontMotorName("LF Motor")
-            .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .xVelocity(1)//forward
-            .yVelocity(1);//sideways to the left
-    public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(10)
-            .forwardZeroPowerAcceleration(1)
-            .lateralZeroPowerAcceleration(1)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0.1, 0.1))
-            .headingPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0.1, 0.1))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0, 0, 0, 0, 0))
-            .centripetalScaling(0.005);
-    public static PathConstraints pathConstraints = new PathConstraints
-            (0.99,
-            100,
-            1,
-            1);
+            .rightFrontMotorName("RB Motor")
+            .rightRearMotorName("RF Motor")
+            .leftRearMotorName("LF Motor")
+            .leftFrontMotorName("LB Motor")
+            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .xVelocity(65.55597842136162)
+            .yVelocity(82.5585);
+
+
+    public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
+            .rightFrontMotorName("RB Motor")
+            .rightRearMotorName("RF Motor")
+            .leftRearMotorName("LF Motor")
+            .leftFrontMotorName("LB Motor")
+            .leftFrontEncoderDirection(Encoder.REVERSE)
+            .leftRearEncoderDirection(Encoder.REVERSE)
+            .rightFrontEncoderDirection(Encoder.FORWARD)
+            .rightRearEncoderDirection(Encoder.FORWARD)
+            .robotLength(17.7165)
+            .robotWidth(17.7165)
+            .forwardTicksToInches(0.00625)
+            .strafeTicksToInches(0.0087)
+            .turnTicksToInches(0.2157287839043542);
+
+
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
-                .driveEncoderLocalizer(localizerConstants)
                 .pathConstraints(pathConstraints)
                 .mecanumDrivetrain(driveConstants)
+                .driveEncoderLocalizer(localizerConstants)
                 .build();
     }
 }
