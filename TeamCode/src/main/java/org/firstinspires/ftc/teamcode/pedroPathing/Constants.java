@@ -44,7 +44,7 @@ public class Constants {
             .robotWidth(17.7165)
             .forwardTicksToInches(0.00625)
             .strafeTicksToInches(0.0087)
-            .turnTicksToInches(0.2157287839043542);
+            .turnTicksToInches(0.1376253184);
 
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
