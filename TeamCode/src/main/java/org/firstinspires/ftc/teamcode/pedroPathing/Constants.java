@@ -19,10 +19,10 @@ public class Constants {
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
-            .rightFrontMotorName("RB Motor")
-            .rightRearMotorName("RF Motor")
-            .leftRearMotorName("LF Motor")
-            .leftFrontMotorName("LB Motor")
+            .rightFrontMotorName("RB Motor")                 // NOTE:
+            .rightRearMotorName("RF Motor")                  // Motor names are intentionally cross-mapped.
+            .leftRearMotorName("LF Motor")                   // Physical Motor orientation is mirrored on this robot.
+            .leftFrontMotorName("LB Motor")                  // Changing these WILL break Pedro pathing.
             .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
@@ -32,10 +32,10 @@ public class Constants {
 
 
     public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
-            .rightFrontMotorName("RB Motor")
-            .rightRearMotorName("RF Motor")
-            .leftRearMotorName("LF Motor")
-            .leftFrontMotorName("LB Motor")
+            .rightFrontMotorName("RB Motor")           // NOTE:
+            .rightRearMotorName("RF Motor")            // Encoder names are intentionally cross-mapped.
+            .leftRearMotorName("LF Motor")             // Physical Encoder orientation is mirrored on this robot.
+            .leftFrontMotorName("LB Motor")            // Changing these WILL break Pedro pathing.
             .leftFrontEncoderDirection(Encoder.REVERSE)
             .leftRearEncoderDirection(Encoder.REVERSE)
             .rightFrontEncoderDirection(Encoder.FORWARD)
