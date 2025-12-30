@@ -33,6 +33,8 @@ public class TeleOp2 extends OpMode {
     double error;
     boolean CircleWasPressed;
     boolean SquareWasPressed;
+    boolean LeftBumperWasPressed;
+    double JuggleDelay;
     float RightStickX;
     double TargetVelocity;
     double[] Velocity = { 900, 1200, 1500, 2100};
@@ -41,20 +43,22 @@ public class TeleOp2 extends OpMode {
     ShooterState shooterstate = ShooterState.Idle;
     double StateStartTime = 0;
     boolean motorIsRevving = false;
-
+    //Below is the enumeration for all the shooter states used in the state machine for the shooter.
     public enum ShooterState {
         Idle,
+        Calibration,
         Shoot,
         Juggle,
         Reverse,
-
         Outtake,
+
 
     }
 
 
     @Override
     public void init() {
+        //Assign the declared motors and servos to their respective ports
         LFMotor = hardwareMap.get(DcMotorEx.class, "LF Motor");
         LBMotor = hardwareMap.get(DcMotorEx.class, "LB Motor");
         RBMotor = hardwareMap.get(DcMotorEx.class, "RB Motor");
@@ -62,7 +66,7 @@ public class TeleOp2 extends OpMode {
         Potato1 = hardwareMap.get(DcMotorEx.class, "Potato1");
         Servo7 = hardwareMap.get(Servo.class, "Servo 7");
         Servo8 = hardwareMap.get(Servo.class, "Servo 8");
-
+        //Initialize variables and set motors behavior
         Toggle2 = 1;
         Toggle = 1;
         CircleWasPressed = false;
@@ -73,10 +77,13 @@ public class TeleOp2 extends OpMode {
         LFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        Potato1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Potato1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Potato1.setDirection(DcMotorSimple.Direction.REVERSE);
-        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(240.0, 0, 0.5, 15.8240);
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(240.0, 0, 0.5, 12.8240);
         Potato1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
+        Servo7.setPosition(0.5);
+        Servo8.setPosition(0.5);
 
 
 
@@ -102,7 +109,7 @@ public class TeleOp2 extends OpMode {
     }
 
 
-    // Below is what controls the what shows up on the robot driver dashboard
+    // Below is what controls what shows up on the robot driver dashboard
     private void Telemetry() {
 
         if (ReverseDrive) {
@@ -118,7 +125,11 @@ public class TeleOp2 extends OpMode {
         telemetry.addData("Error", error);
 
         telemetry.addData("State", shooterstate);
-        telemetry.addData("Revving", Toggle2);
+        if(motorIsRevving){
+            telemetry.addData("Revving", "On" );
+        }
+        else { telemetry.addData("Revving", "Off");
+        }
         telemetry.update();
     }
 
@@ -172,27 +183,30 @@ public class TeleOp2 extends OpMode {
 
         //Below is the state machine for the shooter states
         switch (shooterstate) {
-            case Idle:
+            case Idle:                                            //The state the robot is in when it isn't doing anything
                 if (gamepad1.rightBumperWasPressed()) {
                     Potato1.setVelocity(TargetVelocity);
                     StateStartTime = getRuntime();
-                    shooterstate = ShooterState.Shoot;
+                    shooterstate = ShooterState.Calibration;      //State transition into calibration state
                 }
-                if (gamepad1.leftBumperWasPressed()) {
-                    Potato1.setVelocity(450);
+                if (gamepad1.leftBumperWasPressed() && !LeftBumperWasPressed) {
+                    JuggleDelay = 0.3;
+                    LeftBumperWasPressed = true;
+                    Potato1.setVelocity(480);
                     StateStartTime = getRuntime();
-                    shooterstate = ShooterState.Juggle;
-                }
+                    shooterstate = ShooterState.Juggle;            //State transition into Juggle
+                } else {JuggleDelay = 0;
+                LeftBumperWasPressed = false;}
                 if (gamepad1.triangleWasPressed()) {
                     Potato1.setVelocity(-600);
                     StateStartTime = getRuntime();
-                    shooterstate = ShooterState.Reverse;
+                    shooterstate = ShooterState.Reverse;           //State Transition into Reverse
                 }
                 if (shooterstate == ShooterState.Idle){
 
 
                     if(Toggle2 == 2){
-                        Potato1.setVelocity(1450);
+                        Potato1.setVelocity(TargetVelocity);
                         motorIsRevving = true;
                     } else {motorIsRevving = false;}
                     if(Potato1.getVelocity() > 50 && !motorIsRevving || Potato1.getVelocity() <-50 && !motorIsRevving){
@@ -200,36 +214,34 @@ public class TeleOp2 extends OpMode {
                     }
                     break;
                 }
+            case Calibration:
+                if (error < 5 && error >-5){
+                    shooterstate = ShooterState.Shoot;
+                    StateStartTime = getRuntime();
+                }
 
             case Shoot:
 
 
-                if (error < 10) {
+                if (error < 5 && error > -5 && getRuntime() - StateStartTime > 0.18 ) {
                     Servo7.setPosition(-1);
                     Servo8.setPosition(1);
                     shooterstate = ShooterState.Outtake;
                     StateStartTime = getRuntime();
 
+                } else if (getRuntime() - StateStartTime >0.19) {
+                    shooterstate = ShooterState.Calibration;
                 }
 
                 break;
 
             case Juggle:
 
-                if (getRuntime() - StateStartTime > 0.4) {
+                if (480 - Potato1.getVelocity() < 5 && 480 - Potato1.getVelocity() > -5) {
                     Servo7.setPosition(-1);
                     Servo8.setPosition(1);
-                    if (getRuntime() - StateStartTime > 0.75) {
-                        Servo7.setPosition(0.5);
-                        Servo8.setPosition(0.5);
-                        if (getRuntime() - StateStartTime > 1.05){
-                            Potato1.setVelocity(0);
-                            shooterstate = ShooterState.Idle;
-                        }
-
-
-
-                    }
+                    shooterstate = ShooterState.Outtake;
+                    StateStartTime = getRuntime();
 
 
                 }
@@ -237,11 +249,12 @@ public class TeleOp2 extends OpMode {
 
             case Reverse:
 
-                if (getRuntime() - StateStartTime > 0.3) {
+                if (getRuntime() - StateStartTime > 0.2) {
+                    Potato1.setVelocity(0);
                     Servo7.setPosition(1);
                     Servo8.setPosition(-1);
-                    if (getRuntime() - StateStartTime > 0.6) {
-                        Potato1.setVelocity(0);
+                    if (getRuntime() - StateStartTime > 0.4) {
+
                         Servo7.setPosition(0.5);
                         Servo8.setPosition(0.5);
                         shooterstate = ShooterState.Idle;
@@ -252,10 +265,10 @@ public class TeleOp2 extends OpMode {
                 }
                 break;
             case Outtake:
-                if(getRuntime() - StateStartTime > 0.3){
+                if(getRuntime() - StateStartTime > 0.3 ){
                     Servo7.setPosition(0.5);
                     Servo8.setPosition(0.5);
-                    if(getRuntime() - StateStartTime > 0.6)
+                    if(getRuntime() - StateStartTime > 0.6 + JuggleDelay)
                         Potato1.setVelocity(0);
                     shooterstate = ShooterState.Idle;
                 }
