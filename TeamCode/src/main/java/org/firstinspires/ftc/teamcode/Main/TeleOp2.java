@@ -21,9 +21,11 @@ public class TeleOp2 extends OpMode {
     private DcMotorEx RBMotor;
     private DcMotorEx RFMotor;
     private DcMotorEx Potato1;
+    private DcMotorEx Potato2;
+    private DcMotorEx Potato3;
     private Servo Servo7;
     private Servo Servo8;
-    private DcMotorEx Potato2;
+
 
     //Declare Variables
     float LeftStickY;
@@ -36,7 +38,6 @@ public class TeleOp2 extends OpMode {
     boolean CircleWasPressed;
     boolean SquareWasPressed;
     boolean CrossWasPressed;
-    Boolean LeftBumperWasPressed = false;
     float RightStickX;
     double TargetVelocity;
     double[] Velocity = { 900, 1200, 1500, 2100};
@@ -66,9 +67,11 @@ public class TeleOp2 extends OpMode {
         RBMotor = hardwareMap.get(DcMotorEx.class, "RB Motor");
         RFMotor = hardwareMap.get(DcMotorEx.class, "RF Motor");
         Potato1 = hardwareMap.get(DcMotorEx.class, "Potato1");
+        Potato2 = hardwareMap.get(DcMotorEx.class, "Potato2");
+        Potato3 = hardwareMap.get(DcMotorEx.class, "Potato3");
         Servo7 = hardwareMap.get(Servo.class, "Servo 7");
         Servo8 = hardwareMap.get(Servo.class, "Servo 8");
-        Potato2 = hardwareMap.get(DcMotorEx.class, "Potato2");
+
         //Initialize variables and set motors behavior
         Toggle4 = 1;
         Toggle3 = 1;
@@ -147,6 +150,7 @@ public class TeleOp2 extends OpMode {
         TargetVelocity = Velocity[VelocityIndex];
 
 
+
         if (gamepad1.squareWasPressed() & !SquareWasPressed){
             Toggle2 += 1;
             SquareWasPressed = true;
@@ -166,53 +170,24 @@ public class TeleOp2 extends OpMode {
         switch (shooterstate) {
             case Idle:  //The state the robot is in when it isn't doing anything
 
-                if (gamepad1.rightBumperWasPressed()) {
+                if(gamepad1.left_trigger> 0.1){
+                    Potato2.setVelocity(-2000);
+                    Servo7.setPosition(-1);
+                    Servo8.setPosition(1);
+
+                }
+
+                if (gamepad1.right_trigger > 0.1) {
                     Potato1.setVelocity(TargetVelocity);
                     StateStartTime = getRuntime();
                     shooterstate = ShooterState.Calibration;      //State transition into calibration state
                 }
 
-                if (gamepad1.triangleWasPressed()) {
-                    Potato1.setVelocity(-600);
-                    StateStartTime = getRuntime();
-                    shooterstate = ShooterState.Reverse;
-                }
-
-                if(gamepad1.crossWasPressed() & !CrossWasPressed){
-                    Toggle3 += 1;
-                    CrossWasPressed = true;
-                }else {CrossWasPressed = false;}
-
-
-                if (Toggle3 > 2){
-                    Toggle3 = 1;
-                }
 
 
 
 
-                if(Toggle3 == 2 && Toggle == 1){
-                    Potato2.setVelocity(-2000);
-                    Servo7.setPosition(-1);
-                    Servo8.setPosition(1);
-                }else if(Toggle3 == 1 & Toggle == 1){Potato2.setVelocity(0);
-                    Servo7.setPosition(0.5);
-                    Servo8.setPosition(0.5);}
 
-
-                if(gamepad1.circleWasPressed() && !CircleWasPressed){
-                    Toggle += 1;
-                    CircleWasPressed = true;
-                }else {CircleWasPressed = false;}
-
-
-                if(Toggle > 2)
-                {Toggle = 1;}
-
-
-                if(Toggle == 2 && Toggle3 == 1){
-                    Potato2.setVelocity(2000);
-                }else if(Toggle3 == 1 & Toggle == 1) {Potato2.setVelocity(0);}
 
 
                 if (shooterstate == ShooterState.Idle) {
@@ -243,8 +218,7 @@ public class TeleOp2 extends OpMode {
 
 
                 if (error < 5 && error > -5 && getRuntime() - StateStartTime > 0.18) {
-                   Servo7.setPosition(1);
-                   Servo8.setPosition(-1);
+                    Potato3.setVelocity(-2000);
                     shooterstate = ShooterState.Outtake;
                     StateStartTime = getRuntime();
 
@@ -273,10 +247,9 @@ public class TeleOp2 extends OpMode {
                 }
                 break;
             case Outtake:
-                if (getRuntime() - StateStartTime > 0.2) {
-                   Servo7.setPosition(0.5);
-                   Servo8.setPosition(0.5);
-                    if (getRuntime() - StateStartTime > 0.5)
+                if (getRuntime() - StateStartTime > 2) {
+                 Potato3.setVelocity(0);
+                    if (getRuntime() - StateStartTime > 2.3)
                         Potato1.setVelocity(0);
                     shooterstate = ShooterState.Idle;
                 }
