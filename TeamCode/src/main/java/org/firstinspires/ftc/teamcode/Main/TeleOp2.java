@@ -226,6 +226,10 @@ public class TeleOp2 extends OpMode {
                 if (error < 5 && error > -5 && getRuntime() - StateStartTime > 0.18 ) {
                     Servo7.setPosition(-1);
                     Servo8.setPosition(1);
+                if (error < 5 && error > -5 && getRuntime() - StateStartTime > 0.18) {
+                   Servo7.setPosition(1);
+                   Servo8.setPosition(-1);
+                   Potato2.setVelocity(-2000);
                     shooterstate = ShooterState.Outtake;
                     StateStartTime = getRuntime();
 
