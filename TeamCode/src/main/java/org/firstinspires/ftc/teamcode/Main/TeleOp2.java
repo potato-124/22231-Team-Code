@@ -21,8 +21,11 @@ public class TeleOp2 extends OpMode {
     private DcMotorEx RBMotor;
     private DcMotorEx RFMotor;
     private DcMotorEx Potato1;
+    private DcMotorEx Potato2;
+    private DcMotorEx Potato3;
     private Servo Servo7;
     private Servo Servo8;
+
 
     //Declare Variables
     boolean ReverseDrive;
@@ -30,11 +33,14 @@ public class TeleOp2 extends OpMode {
     float LeftStickX;
     int Toggle;
     int Toggle2;
+    int Toggle3;
+    int Toggle4;
     double error;
     boolean CircleWasPressed;
     boolean SquareWasPressed;
     boolean LeftBumperWasPressed;
     double JuggleDelay;
+    boolean CrossWasPressed;
     float RightStickX;
     double TargetVelocity;
     double[] Velocity = { 900, 1200, 1500, 2100};
@@ -53,6 +59,7 @@ public class TeleOp2 extends OpMode {
         Outtake,
 
 
+
     }
 
 
@@ -64,9 +71,14 @@ public class TeleOp2 extends OpMode {
         RBMotor = hardwareMap.get(DcMotorEx.class, "RB Motor");
         RFMotor = hardwareMap.get(DcMotorEx.class, "RF Motor");
         Potato1 = hardwareMap.get(DcMotorEx.class, "Potato1");
+        Potato2 = hardwareMap.get(DcMotorEx.class, "Potato2");
+        Potato3 = hardwareMap.get(DcMotorEx.class, "Potato3");
         Servo7 = hardwareMap.get(Servo.class, "Servo 7");
         Servo8 = hardwareMap.get(Servo.class, "Servo 8");
+
         //Initialize variables and set motors behavior
+        Toggle4 = 1;
+        Toggle3 = 1;
         Toggle2 = 1;
         Toggle = 1;
         CircleWasPressed = false;
@@ -106,6 +118,9 @@ public class TeleOp2 extends OpMode {
         LBMotor.setPower(Range.clip(LeftStickY - RightStickX - LeftStickX, -1, 1));
         RBMotor.setPower(Range.clip(LeftStickY + RightStickX + LeftStickX, -1, 1));
         RFMotor.setPower(Range.clip(LeftStickY + RightStickX - LeftStickX, -1, 1));
+        LeftStickY = gamepad1.left_stick_y;
+        RightStickX = gamepad1.right_stick_x;
+        LeftStickX = gamepad1.left_stick_x;
     }
 
 
@@ -166,18 +181,28 @@ public class TeleOp2 extends OpMode {
         if (gamepad1.dpadUpWasPressed()) {
             VelocityIndex = (VelocityIndex + 1) % Velocity.length;
         }
+
+
         if (gamepad1.dpadDownWasPressed()) {
             VelocityIndex = (VelocityIndex - 1 + Velocity.length) % Velocity.length;
         }
+
         TargetVelocity = Velocity[VelocityIndex];
+
+
+
         if (gamepad1.squareWasPressed() & !SquareWasPressed){
             Toggle2 += 1;
             SquareWasPressed = true;
 
         } else {SquareWasPressed = false;}
+
+
         if (Toggle2 > 2){
             Toggle2 = 1;
         }
+
+
         error = TargetVelocity - Potato1.getVelocity();
 
 
@@ -185,6 +210,16 @@ public class TeleOp2 extends OpMode {
         switch (shooterstate) {
             case Idle:                                            //The state the robot is in when it isn't doing anything
                 if (gamepad1.rightBumperWasPressed()) {
+            case Idle:  //The state the robot is in when it isn't doing anything
+
+                if(gamepad1.left_trigger> 0.1){
+                    Potato2.setVelocity(-2000);
+                    Servo7.setPosition(-1);
+                    Servo8.setPosition(1);
+
+                }
+
+                if (gamepad1.right_trigger > 0.1) {
                     Potato1.setVelocity(TargetVelocity);
                     StateStartTime = getRuntime();
                     shooterstate = ShooterState.Calibration;      //State transition into calibration state
@@ -206,23 +241,44 @@ public class TeleOp2 extends OpMode {
 
 
                     if(Toggle2 == 2){
+
+
+
+
+
+
+                if (shooterstate == ShooterState.Idle) {
+
+
+                    if (Toggle2 == 2) {
                         Potato1.setVelocity(TargetVelocity);
                         motorIsRevving = true;
                     } else {motorIsRevving = false;}
                     if(Potato1.getVelocity() > 50 && !motorIsRevving || Potato1.getVelocity() <-50 && !motorIsRevving){
+                    } else {
+                        motorIsRevving = false;
+                    }
+
+
+                    if (Potato1.getVelocity() > 50 && !motorIsRevving || Potato1.getVelocity() < -50 && !motorIsRevving) {
                         Potato1.setVelocity(1);
                     }
                     break;
+
                 }
+                break;
             case Calibration:
                 if (error < 5 && error >-5){
+                if (error < 5 && error > -5) {
                     shooterstate = ShooterState.Shoot;
                     StateStartTime = getRuntime();
                 }
+                break;
 
             case Shoot:
 
 
+<<<<<<< HEAD
                 if (error < 5 && error > -5 && getRuntime() - StateStartTime > 0.18 ) {
                     Servo7.setPosition(-1);
                     Servo8.setPosition(1);
@@ -230,10 +286,15 @@ public class TeleOp2 extends OpMode {
                    Servo7.setPosition(1);
                    Servo8.setPosition(-1);
                    Potato2.setVelocity(-2000);
+=======
+                if (error < 5 && error > -5 && getRuntime() - StateStartTime > 0.18) {
+                    Potato3.setVelocity(-2000);
+>>>>>>> 2e05d7fa4f164c48f13fe75f05c2201ad2bd7578
                     shooterstate = ShooterState.Outtake;
                     StateStartTime = getRuntime();
 
                 } else if (getRuntime() - StateStartTime >0.19) {
+                } else if (getRuntime() - StateStartTime > 0.19) {
                     shooterstate = ShooterState.Calibration;
                 }
 
@@ -273,9 +334,15 @@ public class TeleOp2 extends OpMode {
                     Servo7.setPosition(0.5);
                     Servo8.setPosition(0.5);
                     if(getRuntime() - StateStartTime > 0.6 + JuggleDelay)
+                if (getRuntime() - StateStartTime > 2) {
+                 Potato3.setVelocity(0);
+                    if (getRuntime() - StateStartTime > 2.3)
                         Potato1.setVelocity(0);
                     shooterstate = ShooterState.Idle;
                 }
+                break;
+
+        }
 
 
         }
