@@ -10,12 +10,13 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
+
 
 @TeleOp(name = "TeleOp2")
 public class TeleOp2 extends OpMode {
 
     // Declare Motors and Servos
+
     private DcMotorEx LFMotor;
     private DcMotorEx LBMotor;
     private DcMotorEx RBMotor;
@@ -36,7 +37,7 @@ public class TeleOp2 extends OpMode {
     boolean CircleWasPressed;
     boolean SquareWasPressed;
     double TargetVelocity;
-    double[] Velocity = {-900, -1200, -1500, -2100};
+    double[] Velocity = {-900, -1000, -1200, -1300, -1400, -1500, -1600, -1700, -1800, -1900, -2000, -2100};
 
     int VelocityIndex = 1;
     ShooterState shooterstate = ShooterState.Idle;
@@ -149,7 +150,9 @@ public class TeleOp2 extends OpMode {
             telemetry.addData("Revving", "On");
         } else {
             telemetry.addData("Revving", "Off");
+
         }
+        telemetry.addData("Left Trigger", gamepad1.left_trigger);
         telemetry.update();
     }
 
@@ -188,15 +191,30 @@ public class TeleOp2 extends OpMode {
         //Below is the state machine for the shooter states
         switch (shooterstate) {
             case Idle:  //The state the robot is in when it isn't doing anything
-
-                if (gamepad1.left_trigger > 0.1) {
-                    Potato2.setVelocity(-2000);
-                    Servo7.setPosition(-1);
+                if (gamepad1.circle) {
+                    // Mode: Circle Pressed
+                    Potato2.setVelocity(2000);
+                    Servo7.setPosition(-1.0);
                     Servo8.setPosition(1);
-
-                }else { Potato2.setVelocity(0);
+                }
+                else if (gamepad1.left_trigger > 0.5) {
+                    Potato2.setVelocity(-2000);
+                    Servo7.setPosition(1);
+                    Servo8.setPosition(-1);
+                }
+                else {
+                    Potato2.setVelocity(0);
                     Servo7.setPosition(0.5);
-                    Servo8.setPosition(0.5);}
+                    Servo8.setPosition(0.5);
+                }
+
+                if (gamepad1.left_bumper) {
+                    Potato3.setPower(-1);
+                } else {
+                    Potato3.setPower(0);
+                }
+
+
 
                 if (gamepad1.right_trigger > 0.1) {
                     Potato1.setVelocity(TargetVelocity);
@@ -232,50 +250,44 @@ public class TeleOp2 extends OpMode {
             case Shoot:
 
 
+                if (error < 5 && error > -5 && getRuntime() - StateStartTime > 0.18) {
+                    Potato3.setPower(-1);
 
-                        if (error < 5 && error > -5 && getRuntime() - StateStartTime > 0.18) {
-                            Potato3.setPower(-1);
+                    shooterstate = ShooterState.Outtake;
+                    StateStartTime = getRuntime();
 
-                            shooterstate = ShooterState.Outtake;
-                            StateStartTime = getRuntime();
+                } else if (getRuntime() - StateStartTime > 0.19) {
+                    shooterstate = ShooterState.Calibration;
+                }
 
-                        } else if (getRuntime() - StateStartTime > 0.19) {
-                            shooterstate = ShooterState.Calibration;
-                        }
+                break;
+            case Reverse:
 
-                        break;
-                        case Reverse:
+                if (getRuntime() - StateStartTime > 0.2) {
+                    Potato1.setVelocity(0);
+                    Servo7.setPosition(1);
+                    Servo8.setPosition(-1);
+                    if (getRuntime() - StateStartTime > 0.4) {
 
-                            if (getRuntime() - StateStartTime > 0.2) {
-                                Potato1.setVelocity(0);
-                                Servo7.setPosition(1);
-                                Servo8.setPosition(-1);
-                                if (getRuntime() - StateStartTime > 0.4) {
-
-                                    Servo7.setPosition(0.5);
-                                    Servo8.setPosition(0.5);
-                                    shooterstate = ShooterState.Idle;
-
-                                }
-
-
-                            }
-                            break;
-                        case Outtake:
-                            if (getRuntime() - StateStartTime > 2) {
-                                Potato3.setVelocity(0);
-                                if (getRuntime() - StateStartTime > 2.3)
-                                    Potato1.setVelocity(0);
-                                shooterstate = ShooterState.Idle;
-                            }
-                            break;
+                        Servo7.setPosition(0.5);
+                        Servo8.setPosition(0.5);
+                        shooterstate = ShooterState.Idle;
 
                     }
 
 
-
-
+                }
+                break;
+            case Outtake:
+                if (getRuntime() - StateStartTime > 2) {
+                    Potato3.setVelocity(0);
+                    if (getRuntime() - StateStartTime > 2.3)
+                        Potato1.setVelocity(0);
+                    shooterstate = ShooterState.Idle;
+                }
+                break;
 
         }
-    }
 
+    }
+    }

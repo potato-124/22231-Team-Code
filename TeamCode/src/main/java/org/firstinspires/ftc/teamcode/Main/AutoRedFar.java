@@ -2,87 +2,51 @@ package org.firstinspires.ftc.teamcode.Main;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.util.jar.Attributes;
-
-@Autonomous(name = "Auto 1")
-
-public class Auto_1  extends LinearOpMode {
+@Autonomous
+public class AutoRedFar extends LinearOpMode {
+    double StateStartTime = 0;
+    public enum RobotState {
+        Idle,
+        Revving,
+        Shooting,
+        Finished,
+    }
+    RobotState robotstate = RobotState.Idle;
     private DcMotorEx LFMotor;
     private DcMotorEx LBMotor;
     private DcMotorEx RBMotor;
     private DcMotorEx RFMotor;
     private DcMotorEx Potato1;
+    private DcMotorEx Potato2;
+    private DcMotorEx Potato3;
 
     private Servo Servo7;
     private Servo Servo8;
 
-    static final double  TICKS_PER_MOTOR_REV = 537.7;
-    static final double WHEEL_DIAMETER_INCHES = 4.09449;
-    static final double TICKS_PER_INCH = (TICKS_PER_MOTOR_REV/WHEEL_DIAMETER_INCHES * Math.PI);
-
-    static final double Drive_Speed = 0.6;
-    static final double Turn_Speed = 0.5;
 
 
 
 
-    private ElapsedTime runtime = new ElapsedTime();
-    public void SetDrivePower (double LB, double LF, double RB, double RF){
-        LBMotor.setPower(LB);
-        LFMotor.setPower(LF);
-        RBMotor.setPower(RB);
-        RFMotor.setPower(RF);
 
-    }
-    public void SetLeftDrivePower (double LB, double LF){
-        LBMotor.setPower(LB);
-        LFMotor.setPower(LF);
-    }
-    public void SetRightDrivePower (double RB, double RF){
-
-        RBMotor.setPower(RB);
-        RFMotor.setPower(RF);
-
-    }
-    public void SetTargetPosition (int LB, int LF, int RB, int RF){
-        LBMotor.setTargetPosition(LB);
-        LFMotor.setTargetPosition(LF);
-        RBMotor.setTargetPosition(RB);
-        RFMotor.setTargetPosition(RF);
-
-    }
-    public void SetLeftTargetPosition (int LB, int LF){
-        LBMotor.setTargetPosition(LB);
-        LFMotor.setTargetPosition(LF);
-
-    }
-    public void SetRightTargetPosition ( int RB, int RF){
-        RBMotor.setTargetPosition(RB);
-        RFMotor.setTargetPosition(RF);
-
-    }
-
-
-    public void runOpMode () {
-
+    public void runOpMode(){
         LFMotor = hardwareMap.get(DcMotorEx.class, "LF Motor");
         LBMotor = hardwareMap.get(DcMotorEx.class, "LB Motor");
         RBMotor = hardwareMap.get(DcMotorEx.class, "RB Motor");
         RFMotor = hardwareMap.get(DcMotorEx.class, "RF Motor");
         Potato1 = hardwareMap.get(DcMotorEx.class, "Potato1");
+        Potato2 = hardwareMap.get(DcMotorEx.class, "Potato2");
+        Potato3 = hardwareMap.get(DcMotorEx.class, "Potato3");
         Servo7 = hardwareMap.get(Servo.class, "Servo 7");
         Servo8 = hardwareMap.get(Servo.class, "Servo 8");
 
-        RBMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        RFMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        LBMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        LFMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         LBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -101,24 +65,46 @@ public class Auto_1  extends LinearOpMode {
         Potato1.setDirection(DcMotorSimple.Direction.REVERSE);
         PIDFCoefficients pidfCoefficients = new PIDFCoefficients(240.0, 0, 0.5, 15.8240);
         Potato1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
-
-        telemetry.addData("Starting at", "%7d :%7d",
-                LFMotor.getCurrentPosition(),
-                LBMotor.getCurrentPosition(),
-                RFMotor.getCurrentPosition(),
-                RBMotor.getCurrentPosition());
-
-
-
         waitForStart();
+        while (opModeIsActive()) {
 
+            switch (robotstate) {
+                case Idle:
 
+                    StateStartTime = getRuntime();
+                    robotstate = RobotState.Revving;
+                    break;
+                case Revving:
+                    Potato1.setVelocity(-1700);
+                    StateStartTime = getRuntime();
+                    robotstate = RobotState.Shooting;
+                    break;
 
+                case Shooting:
+                    if (1700 - Math.abs(Potato1.getVelocity()) < 10) {
+                        Potato2.setVelocity(-2000);
+                        Servo7.setPosition(-1);
+                        Servo8.setPosition(1);
+                        Potato3.setPower(-1);
+                        robotstate = RobotState.Finished;
+                        StateStartTime = getRuntime();
+                    }
+                    break;
+                case Finished:
+                    if (getRuntime() - StateStartTime > 4) {
+                        Potato2.setVelocity(0);
+                        Servo7.setPosition(0.5);
+                        Servo8.setPosition(0.5);
+                        Potato3.setPower(0);
+                        if (getRuntime() - StateStartTime > 5) {
+                            Potato1.setVelocity(1);
+                        }
+                    }
+
+            }
+        }
 
 
     }
-
-
-
 
 }
