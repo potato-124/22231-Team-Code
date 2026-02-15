@@ -32,19 +32,19 @@ public class Constants {
 
 
     public static DriveEncoderConstants localizerConstants = new DriveEncoderConstants()
-            .rightFrontMotorName("RB Motor")           // NOTE:
-            .rightRearMotorName("RF Motor")            // Encoder names are intentionally cross-mapped.
-            .leftRearMotorName("LF Motor")             // Physical Encoder orientation is mirrored on this robot.
-            .leftFrontMotorName("LB Motor")            // Changing these WILL break Pedro pathing.
+            .rightFrontMotorName("RF Motor")           // NOTE:
+            .rightRearMotorName("RB Motor")            // Encoder names are intentionally cross-mapped.
+            .leftRearMotorName("LB Motor")             // Physical Encoder orientation is mirrored on this robot.
+            .leftFrontMotorName("LF Motor")            // Changing these WILL break Pedro pathing.
             .leftFrontEncoderDirection(Encoder.REVERSE)
             .leftRearEncoderDirection(Encoder.REVERSE)
             .rightFrontEncoderDirection(Encoder.FORWARD)
             .rightRearEncoderDirection(Encoder.FORWARD)
             .robotLength(17.7165)
             .robotWidth(17.7165)
-            .forwardTicksToInches(0.00625)
-            .strafeTicksToInches(0.0087)
-            .turnTicksToInches(0.1376253184);
+            .forwardTicksToInches(0.008226)
+            .strafeTicksToInches(0.009358)
+            .turnTicksToInches(0.0007);
 
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);

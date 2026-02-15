@@ -75,28 +75,28 @@ public class AutoRedFar extends LinearOpMode {
                     robotstate = RobotState.Revving;
                     break;
                 case Revving:
-                    Potato1.setVelocity(-1700);
+                    Potato1.setVelocity(-1800);
                     StateStartTime = getRuntime();
                     robotstate = RobotState.Shooting;
                     break;
 
                 case Shooting:
-                    if (1700 - Math.abs(Potato1.getVelocity()) < 10) {
+                    if (1800 - Math.abs(Potato1.getVelocity()) < 10) {
                         Potato2.setVelocity(-2000);
-                        Servo7.setPosition(-1);
-                        Servo8.setPosition(1);
+                        Servo7.setPosition(1);
+                        Servo8.setPosition(-1);
                         Potato3.setPower(-1);
                         robotstate = RobotState.Finished;
                         StateStartTime = getRuntime();
                     }
                     break;
                 case Finished:
-                    if (getRuntime() - StateStartTime > 4) {
+                    if (getRuntime() - StateStartTime > 5) {
                         Potato2.setVelocity(0);
                         Servo7.setPosition(0.5);
                         Servo8.setPosition(0.5);
                         Potato3.setPower(0);
-                        if (getRuntime() - StateStartTime > 5) {
+                        if (getRuntime() - StateStartTime > 6) {
                             Potato1.setVelocity(1);
                         }
                     }

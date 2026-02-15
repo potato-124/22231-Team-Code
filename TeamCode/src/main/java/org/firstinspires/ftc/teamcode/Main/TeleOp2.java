@@ -37,9 +37,9 @@ public class TeleOp2 extends OpMode {
     boolean CircleWasPressed;
     boolean SquareWasPressed;
     double TargetVelocity;
-    double[] Velocity = {-900, -1000, -1200, -1300, -1400, -1500, -1600, -1700, -1800, -1900, -2000, -2100};
+    double[] Velocity = {-1200, -1300, -1700, -1800, -1900, -2000};
 
-    int VelocityIndex = 1;
+    int VelocityIndex = 2;
     ShooterState shooterstate = ShooterState.Idle;
     double StateStartTime = 0;
     boolean motorIsRevving = false;
