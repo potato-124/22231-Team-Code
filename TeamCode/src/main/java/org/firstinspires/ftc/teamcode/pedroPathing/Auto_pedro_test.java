@@ -75,10 +75,9 @@ public class Auto_pedro_test extends OpMode {
                 if (getRuntime() - stateStartTime > 3){
                     intake(0, 0.5);
                 follower.followPath(driveShootPosEndPos, true);
-                if (!follower.isBusy()) {
                     pathState = PathState.Default;
 
-                }}
+                  }
                 break;
             case Default:
                 Potato1.setVelocity(0);
@@ -132,8 +131,8 @@ public class Auto_pedro_test extends OpMode {
     public void intake(double motorPower,double servoSpeed) {
         Potato2.setPower(motorPower);
         Potato3.setPower(motorPower);
-        Servo7.setPosition(servoSpeed * -1);
-        Servo8.setPosition(servoSpeed);
+        Servo7.setPosition(servoSpeed);
+        Servo8.setPosition(servoSpeed * -1);
         if(servoSpeed == 0.5){
             Servo7.setPosition(0.5);
             Servo8.setPosition(0.5);
