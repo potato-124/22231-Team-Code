@@ -62,8 +62,8 @@ public class Auto_pedro_test extends OpMode {
                 break;
             case SHOOT_PRELOAD:
                 if (!follower.isBusy()) {
-                    Potato1.setVelocity(1200);
-                    if (Math.abs(1200 - Potato1.getVelocity()) < 10) {
+                    Potato1.setVelocity(1400);
+                    if (Math.abs(1400 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
                         setPathState(PathState.DRIVE_SHOOTPOS_ENDPOS);
                         stateStartTime = getRuntime();
