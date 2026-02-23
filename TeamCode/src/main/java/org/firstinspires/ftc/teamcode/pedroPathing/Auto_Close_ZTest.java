@@ -6,6 +6,9 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.pedropathing.util.Timer;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 @Autonomous
 public class Auto_Close_ZTest extends OpMode {
     private Follower follower;
@@ -71,6 +74,13 @@ public class Auto_Close_ZTest extends OpMode {
 
     @Override
     public void loop() {
+        follower.update();
+        statePathUpdate();
+        telemetry.addData("Path State", pathState.toString());
+        telemetry.addData("X:" , follower.getPose().getX());
+        telemetry.addData("Y:", follower.getPose().getY());
+        telemetry.addData("Heading:", follower.getPose().getHeading());
+        telemetry.addData("Path Time:", pathTimer.getElapsedTimeSeconds());
 
     }
 }
