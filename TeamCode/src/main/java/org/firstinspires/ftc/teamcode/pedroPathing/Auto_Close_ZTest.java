@@ -6,11 +6,18 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.pedropathing.util.Timer;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Autonomous
 public class Auto_Close_ZTest extends OpMode {
+    private DcMotorEx Potato1;
+    private DcMotorEx Potato2;
+    private DcMotorEx Potato3;
+    private Servo Servo7;
+    private Servo Servo8;
     private Follower follower;
     private Timer pathTimer, OpModeTimer;
     public enum PathState{
@@ -19,6 +26,12 @@ public class Auto_Close_ZTest extends OpMode {
         //shoot state
         drive_start_shoot,
         shoot_preload,
+        preload_load,
+        load_shoot,
+        Default,
+
+
+
 
 
     }
@@ -42,10 +55,9 @@ public class Auto_Close_ZTest extends OpMode {
             case shoot_preload:
                 if(!follower.isBusy()){
                     telemetry.addLine("Done Path 1");
-
                 }
                 break;
-            default:
+            case Default:
                 telemetry.addLine("No state commanded");
                 break;
         }
