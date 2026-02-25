@@ -22,82 +22,168 @@ public class Auto_pedro_test extends OpMode {
     private Servo Servo7;
     private Servo Servo8;
     private Follower follower;
-    private Timer pathTimer, opModeTimer;
+    private Timer opModeTimer;
 
 
     public enum PathState {
         //Start position to end position
         //Drive > Movement state
         //Shoot > Attempt to score the artifact
-        DRIVE_STARTPOS_SHOOT_POS,
-        SHOOT_PRELOAD,
-        DRIVE_SHOOTPOS_ENDPOS,
+        back_Up,
+        shoot,
+        move_To_CollectPos1,
+        collect,
+        move_To_ShootPos1,
+        move_To_CollectPos2,
+        collect2,
+        move_To_ShootPos2,
         Default
     }
 
-    PathState pathState;
-    private final Pose startPose = new Pose(20.53591563994872, 121.92513368983957, Math.toRadians(138));
-    private final Pose shootPose = new Pose(36.193669650643905, 106.26737967914436, Math.toRadians(138));
-    private final Pose endPose = new Pose(63.5721925133689863, 113.95721925133691, Math.toRadians(138));
-    private PathChain driveStartPosShootPos;
-    private PathChain driveShootPosEndPos;
+    PathState currentState;
+    PathState nextState;
+    private final Pose startPose = new Pose(21.000, 122.000, Math.toRadians(138));
+    private final Pose shootPose = new Pose(44.000, 99.000, Math.toRadians(138));
+    private final Pose collectStartPos1 = new Pose(44, 84, Math.toRadians(180));
+    private final Pose collectEndPos1 = new Pose(16, 84, Math.toRadians(180));
+    private final Pose collectStartPos2 = new Pose(44, 60, Math.toRadians(180));
+    private final Pose collectEndPos2 = new Pose(15, 60, Math.toRadians(180));
+    private final Pose collectStartPos3 = new Pose(44, 36, Math.toRadians(180));
+    private final Pose collectEndPos3 = new Pose(17, 36, Math.toRadians(180));
+    
+    private PathChain start_To_Shoot;
+    private PathChain shoot_To_CollectStart1;
+    private PathChain collectStart1_To_CollectEnd1;
+    private PathChain collectEnd1_To_Shoot;
+    private PathChain shoot_To_CollectStart2;
+    private PathChain collectStart2_To_CollectEnd2;
+
+    private PathChain collectEnd2_To_Shoot;
+    private PathChain shoot_To_CollectStart3;
+    private PathChain collectStart3_To_CollectEnd3;
+    private PathChain CollectEnd3_To_Shoot;
+
 
     public void buildPaths() {
         //put in coordinates for start pos then put in coordinates for end pos
-        driveStartPosShootPos = follower.pathBuilder()
+        start_To_Shoot = follower.pathBuilder()
                 .addPath(new BezierLine(startPose, shootPose))
                 .setLinearHeadingInterpolation(startPose.getHeading(), shootPose.getHeading())
                 .build();
-        driveShootPosEndPos = follower.pathBuilder()
-                .addPath(new BezierLine(shootPose, endPose))
-                .setLinearHeadingInterpolation(shootPose.getHeading(), endPose.getHeading())
+        shoot_To_CollectStart1 = follower.pathBuilder()
+                .addPath(new BezierLine(shootPose, collectStartPos1))
+                .setLinearHeadingInterpolation(shootPose.getHeading(), collectStartPos1.getHeading())
                 .build();
+        collectStart1_To_CollectEnd1 = follower.pathBuilder()
+                .addPath(new BezierLine(collectStartPos1, collectEndPos1))
+                .setLinearHeadingInterpolation(180, 180 )
+                .build();
+        collectEnd1_To_Shoot = follower.pathBuilder()
+                .addPath(new BezierLine(collectEndPos1, shootPose))
+                .setLinearHeadingInterpolation(180, 138)
+                .build();
+        shoot_To_CollectStart2 = follower.pathBuilder()
+                .addPath(new BezierLine(shootPose, collectStartPos2))
+                .setLinearHeadingInterpolation(138, 180)
+                .build();
+        collectStart2_To_CollectEnd2 = follower.pathBuilder()
+                .addPath(new BezierLine(collectStartPos2, collectEndPos2))
+                .setLinearHeadingInterpolation(180, 180)
+                .build();
+        collectEnd2_To_Shoot = follower.pathBuilder()
+                .addPath(new BezierLine(collectEndPos2, shootPose))
+                .setLinearHeadingInterpolation(180, 138)
+                .build();
+
+
     }
 
     public void statePathUpdate() {
-        switch (pathState) {
-            case DRIVE_STARTPOS_SHOOT_POS:
-                follower.followPath(driveStartPosShootPos, true);
-                setPathState(PathState.SHOOT_PRELOAD);
+        switch (currentState) {
+            case back_Up:
+                follower.followPath(start_To_Shoot, true);
+                setPathState(PathState.shoot);
+                nextState = PathState.move_To_CollectPos1;
                 break;
-            case SHOOT_PRELOAD:
+            case shoot:
                 if (!follower.isBusy()) {
                     Potato1.setVelocity(1200);
                     if (Math.abs(1200 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
-                        setPathState(PathState.DRIVE_SHOOTPOS_ENDPOS);
-                        stateStartTime = getRuntime();
+
+                        setNextState();
                     }
 
                 }
                 break;
-            case DRIVE_SHOOTPOS_ENDPOS:
+            case move_To_CollectPos1:
                 if (getRuntime() - stateStartTime > 3){
                     intake(0, 0.5);
-                follower.followPath(driveShootPosEndPos, true);
-                    pathState = PathState.Default;
+                    Potato1.setVelocity(0);
+                follower.followPath(shoot_To_CollectStart1, true);
+                    setPathState(PathState.collect);
 
                   }
                 break;
-            case Default:
-                Potato1.setVelocity(0);
+            case collect:
+                if(!follower.isBusy()){
+                    intake(1, 1);
+                    follower.followPath(collectStart1_To_CollectEnd1, true);
+                    setPathState(PathState.move_To_ShootPos1);
 
-                telemetry.addLine("No state commanded");
+                }
+
                 break;
+            case move_To_ShootPos1:
+                if(!follower.isBusy()){
+                    intake(0, 0);
+                    follower.followPath(collectEnd1_To_Shoot);
+                    setPathState(PathState.shoot);
+                    nextState = PathState.move_To_CollectPos2;
+                }
+            case move_To_CollectPos2:
+                if (getRuntime() - stateStartTime > 3){
+                    intake(0, 0.5);
+                    Potato1.setVelocity(0);
+                    follower.followPath(shoot_To_CollectStart2, true);
+                    setPathState(PathState.collect2);
+                }
+            case collect2:
+                if(!follower.isBusy()){
+                    intake(1, 1);
+                    follower.followPath(collectStart2_To_CollectEnd2, true);
+                    setPathState(PathState.move_To_ShootPos2);
+                }
+            case move_To_ShootPos2:
+
+                if(!follower.isBusy()){
+                    intake(0, 0);
+                    follower.followPath(collectEnd2_To_Shoot);
+                    setPathState(PathState.shoot);
+                    nextState = PathState.Default;
+                }
+            case Default:
+                telemetry.addLine("no state commanded");
+
+
 
 
         }
     }
 
     public void setPathState(PathState newState) {
-        pathState = newState;
-        pathTimer.resetTimer();
+        currentState = newState;
+        stateStartTime = getRuntime();
+    }
+    public void setNextState(){
+        currentState = nextState;
+        stateStartTime = getRuntime();
     }
 
     @Override
     public void init() {
-        pathState = PathState.DRIVE_STARTPOS_SHOOT_POS;
-        pathTimer = new Timer();
+        currentState = PathState.back_Up;
+        nextState = PathState.Default;
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
         //Add in the rest of your init mechanisms
@@ -118,13 +204,13 @@ public class Auto_pedro_test extends OpMode {
 
     public void start() {
         opModeTimer.resetTimer();
-        setPathState(pathState);
+        setPathState(currentState);
     }
 
     public void loop() {
         follower.update();
         statePathUpdate();
-        telemetry.addData("State", pathState);
+        telemetry.addData("State", currentState);
 
     }
 
@@ -140,4 +226,5 @@ public class Auto_pedro_test extends OpMode {
 
 
     }
+
 }
