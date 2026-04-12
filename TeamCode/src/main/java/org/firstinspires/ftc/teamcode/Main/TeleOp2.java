@@ -37,11 +37,8 @@ public class TeleOp2 extends OpMode {
     boolean CircleWasPressed;
     boolean SquareWasPressed;
     double TargetVelocity;
-<<<<<<< Updated upstream
-    double[] Velocity = {-1200, -1300, -1700, -1800, -1900, -2000};
-=======
     double[] Velocity = { 900, 1200, 1500, 2100, 2200, 2300, 2400, 2500};
->>>>>>> Stashed changes
+
 
     int VelocityIndex = 2;
     ShooterState shooterstate = ShooterState.Idle;
@@ -88,7 +85,6 @@ public class TeleOp2 extends OpMode {
         RFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         Potato1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Potato1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        Potato1.setDirection(DcMotorSimple.Direction.REVERSE);
         PIDFCoefficients pidfCoefficients = new PIDFCoefficients(240.0, 0, 0.5, 12.8240);
         Potato1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
         Servo7.setPosition(0.5);

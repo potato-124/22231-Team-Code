@@ -1,20 +1,23 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
+
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
+import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
-
-@Autonomous
-public class Auto_BClose_ZTest extends OpMode {
-    double stateStartTime = 0;
+@Autonomous 
+public class Auto_RClose extends OpMode {
+    double startStateTime = 0;
     private DcMotorEx Potato1;
     private DcMotorEx Potato2;
     private DcMotorEx Potato3;
@@ -44,22 +47,21 @@ public class Auto_BClose_ZTest extends OpMode {
         shoot_final,
         Default,
 
-
     }
 
-    PathState pathState;
-    private final Pose startPose = new Pose(20.45698166431594, 122.9562764456982, Math.toRadians(140));
-    private final Pose shootPose = new Pose(43.20451339915375, 99.77433004231311, Math.toRadians(140));
-    private final Pose preloadpose = new Pose(43.471086036671366, 83.90973201692523, Math.toRadians(180));
-    private final Pose load = new Pose(7.860732235443699, 83.68406205923836, Math.toRadians(180));
-    private final Pose shoot2 = new Pose(43.473906911142464, 99.81241184767278, Math.toRadians(140));
-    private final Pose preload2 = new Pose(43.222849083215806, 59.35966149506348, Math.toRadians(180));
-    private final Pose load2 = new Pose(7.521102922187591, 59.16784203102963, Math.toRadians(180));
-    private final Pose shoot3 = new Pose(43.56558533145276, 99.5937940761636, Math.toRadians(140));
-    private final Pose preload3 = new Pose(43.210155148095915, 35.78843441466854, Math.toRadians(180));
-    private final Pose load3 = new Pose(7.015614136156857, 35.31452750352609, Math.toRadians(180));
-    private final Pose shoot4 = new Pose(43.626234132581104, 99.63187588152329, Math.toRadians(140));
-    private final Pose finalPos = new Pose(62.011267605633805, 119.81867339438604, Math.toRadians(140));
+    Auto_RClose.PathState pathState;
+    private final Pose startPose = new Pose(123.54301833568407, 122.3469675599436, Math.toRadians(40));
+    private final Pose shootPose = new Pose(100.59238363892806, 99.77433004231312, Math.toRadians(40));
+    private final Pose preloadpose = new Pose(100.52891396332863, 83.90973201692523, Math.toRadians(0));
+    private final Pose load = new Pose(131.88011283497883, 83.68406205923836, Math.toRadians(0));
+    private final Pose shoot2 = new Pose(100.52609308885754, 99.81241184767278, Math.toRadians(40));
+    private final Pose preload2 = new Pose(100.7771509167842, 59.35966149506348, Math.toRadians(0));
+    private final Pose load2 = new Pose(132.0169252468265, 59.16784203102963, Math.toRadians(0));
+    private final Pose shoot3 = new Pose(100.43441466854725, 99.5937940761636, Math.toRadians(40));
+    private final Pose preload3 = new Pose(100.78984485190409, 35.78843441466854, Math.toRadians(0));
+    private final Pose load3 = new Pose(131.91396332863187, 35.31452750352609, Math.toRadians(0));
+    private final Pose shoot4 = new Pose(100.3737658674189, 99.63187588152329, Math.toRadians(40));
+    private final Pose finalPos = new Pose(99.63187588152329, 108.25811001410436, Math.toRadians(40));
     private PathChain driveStartShoot;
     private PathChain shootPreload;
     private PathChain preloadLoad;
@@ -122,26 +124,26 @@ public class Auto_BClose_ZTest extends OpMode {
         switch (pathState) {
             case drive_start_shoot:
                 follower.followPath(driveStartShoot, true);
-                setPathState(PathState.shoot);
+                setPathState(Auto_RClose.PathState.shoot);
                 break;
 
             case shoot:
-                if (!follower.isBusy() && getRuntime() - stateStartTime > 1) {
-                    Potato1.setVelocity(1400);     //TODO ADD DELAY AND REDUCE SPEED
+                if (!follower.isBusy()) {
+                    Potato1.setVelocity(1400);
                     if (Math.abs(1400 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
 
-                        setPathState(PathState.shoot_preload);
+                        setPathState(Auto_RClose.PathState.shoot_preload);
                     }
                 }
                 break;
 
             case shoot_preload:
-                if(!follower.isBusy() && getRuntime() - stateStartTime > 4) {
+                if (!follower.isBusy()) {
                     intake(0, 0.5);
                     Potato1.setVelocity(0);
                     follower.followPath(shootPreload, true);
-                    setPathState(PathState.preload_load);
+                    setPathState(Auto_RClose.PathState.preload_load);
                     telemetry.addLine("Done Path 1");
                 }
                 break;
@@ -150,7 +152,7 @@ public class Auto_BClose_ZTest extends OpMode {
                 if(!follower.isBusy()){
                     intake(1, 1);
                     follower.followPath(preloadLoad, true);
-                    setPathState(PathState.load_shoot);
+                    setPathState(Auto_RClose.PathState.load_shoot);
                 }
                 break;
 
@@ -158,7 +160,7 @@ public class Auto_BClose_ZTest extends OpMode {
                 if(!follower.isBusy()){
                     intake(0, 0);
                     follower.followPath(loadShoot1, true);
-                    setPathState(PathState.shoot2);
+                    setPathState(Auto_RClose.PathState.shoot2);
                 }
                 break;
 
@@ -167,7 +169,7 @@ public class Auto_BClose_ZTest extends OpMode {
                     Potato1.setVelocity(1400);
                     if (Math.abs(1400 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
-                        setPathState(PathState.shoot_preload2);
+                        setPathState(Auto_RClose.PathState.shoot_preload2);
                     }
                 }
                 break;
@@ -177,7 +179,7 @@ public class Auto_BClose_ZTest extends OpMode {
                     intake(0, 0.5);
                     Potato1.setVelocity(0);
                     follower.followPath(shootPreload2, true);
-                    setPathState(PathState.preload_load2);
+                    setPathState(Auto_RClose.PathState.preload_load2);
                     telemetry.addLine("Done Path 2");
                 }
                 break;
@@ -186,14 +188,14 @@ public class Auto_BClose_ZTest extends OpMode {
                 if(!follower.isBusy()){
                     intake(1, 1);
                     follower.followPath(preloadLoad2, true);
-                    setPathState(PathState.load_shoot2);
+                    setPathState(Auto_RClose.PathState.load_shoot2);
                 }
                 break;
             case load_shoot2:
                 if(!follower.isBusy()){
                     intake(0, 0);
                     follower.followPath(LoadShoot2, true);
-                    setPathState(PathState.shoot3);
+                    setPathState(Auto_RClose.PathState.shoot3);
                 }
                 break;
 
@@ -202,7 +204,7 @@ public class Auto_BClose_ZTest extends OpMode {
                     Potato1.setVelocity(1400);
                     if (Math.abs(1400 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
-                        setPathState(PathState.shoot_preload3);
+                        setPathState(Auto_RClose.PathState.shoot_preload3);
                     }
                 }
                 break;
@@ -212,7 +214,7 @@ public class Auto_BClose_ZTest extends OpMode {
                     intake(0, 0.5);
                     Potato1.setVelocity(0);
                     follower.followPath(shootPreload3, true);
-                    setPathState(PathState.preload_load3);
+                    setPathState(Auto_RClose.PathState.preload_load3);
                     telemetry.addLine("Done Path 3");
                 }
                 break;
@@ -221,7 +223,7 @@ public class Auto_BClose_ZTest extends OpMode {
                 if(!follower.isBusy()){
                     intake(1, 1);
                     follower.followPath(preloadLoad3, true);
-                    setPathState(PathState.load_shoot3);
+                    setPathState(Auto_RClose.PathState.load_shoot3);
                 }
                 break;
 
@@ -229,7 +231,7 @@ public class Auto_BClose_ZTest extends OpMode {
                 if(!follower.isBusy()){
                     intake(0, 0);
                     follower.followPath(LoadShoot3, true);
-                    setPathState(PathState.shoot4);
+                    setPathState(Auto_RClose.PathState.shoot4);
                 }
                 break;
 
@@ -238,7 +240,7 @@ public class Auto_BClose_ZTest extends OpMode {
                     Potato1.setVelocity(1400);
                     if (Math.abs(1400 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
-                        setPathState(PathState.shoot_final);
+                        setPathState(Auto_RClose.PathState.shoot_final);
                     }
                 }
                 break;
@@ -248,9 +250,9 @@ public class Auto_BClose_ZTest extends OpMode {
                     intake(0,0);
                     Potato1.setVelocity(0);
                     follower.followPath(ShootFinal);
-                    setPathState(PathState.Default);
+                    setPathState(Auto_RClose.PathState.Default);
                 }
-            break;
+                break;
 
             case Default:
                 telemetry.addLine("No state commanded");
@@ -262,14 +264,14 @@ public class Auto_BClose_ZTest extends OpMode {
     }
 
 
-    public void setPathState(PathState newState) {
+    public void setPathState(Auto_RClose.PathState newState) {
         pathState = newState;
-        stateStartTime = getRuntime();
+        pathTimer.resetTimer();
     }
 
     @Override
     public void init() {
-        pathState = PathState.drive_start_shoot;
+        pathState = Auto_RClose.PathState.drive_start_shoot;
         pathTimer = new Timer();
         OpModeTimer = new Timer();
         OpModeTimer.resetTimer();
@@ -289,7 +291,6 @@ public class Auto_BClose_ZTest extends OpMode {
         follower.setPose(startPose);
 
     }
-
 
     @Override
     public void loop() {
@@ -313,5 +314,4 @@ public class Auto_BClose_ZTest extends OpMode {
             Servo8.setPosition(0.5);
         }
     }
-
 }
