@@ -84,6 +84,7 @@ public class Auto_BClose_ZTest extends OpMode {
         preloadLoad = follower.pathBuilder()
                 .addPath(new BezierLine(preloadpose, load))
                 .setTangentHeadingInterpolation()
+                .addParametricCallback(0.4, () -> follower.setMaxPower(0.5))
                 .build();
         loadShoot1 = follower.pathBuilder()
                 .addPath(new BezierLine(load, shoot2))
@@ -96,6 +97,7 @@ public class Auto_BClose_ZTest extends OpMode {
         preloadLoad2 = follower.pathBuilder()
                 .addPath(new BezierLine(preload2, load2))
                 .setTangentHeadingInterpolation()
+                .addParametricCallback(0.4, () -> follower.setMaxPower(0.5))
                 .build();
         LoadShoot2 = follower.pathBuilder()
                 .addPath(new BezierLine(load2, shoot3))
@@ -108,6 +110,7 @@ public class Auto_BClose_ZTest extends OpMode {
         preloadLoad3 = follower.pathBuilder()
                 .addPath(new BezierLine(preload3, load3))
                 .setTangentHeadingInterpolation()
+                .addParametricCallback(0.4, () -> follower.setMaxPower(0.5))
                 .build();
         LoadShoot3 = follower.pathBuilder()
                 .addPath(new BezierLine(load3, shoot4))
@@ -137,12 +140,17 @@ public class Auto_BClose_ZTest extends OpMode {
                 break;
 
             case shoot_preload:
+<<<<<<< HEAD
                 if(!follower.isBusy() && getRuntime() - stateStartTime > 4) {
+=======
+                if (!follower.isBusy() && getRuntime() - startStateTime > 3) {
+>>>>>>> 65aa3776ad84ff1368ff6db04bd95f7b44f01704
                     intake(0, 0.5);
                     Potato1.setVelocity(0);
                     follower.followPath(shootPreload, true);
                     setPathState(PathState.preload_load);
                     telemetry.addLine("Done Path 1");
+                    setPathState(PathState.preload_load);
                 }
                 break;
 
@@ -179,6 +187,7 @@ public class Auto_BClose_ZTest extends OpMode {
                     follower.followPath(shootPreload2, true);
                     setPathState(PathState.preload_load2);
                     telemetry.addLine("Done Path 2");
+                    setPathState(PathState.preload_load2);
                 }
                 break;
 
@@ -214,6 +223,7 @@ public class Auto_BClose_ZTest extends OpMode {
                     follower.followPath(shootPreload3, true);
                     setPathState(PathState.preload_load3);
                     telemetry.addLine("Done Path 3");
+                    setPathState(PathState.preload_load3);
                 }
                 break;
 
@@ -264,7 +274,11 @@ public class Auto_BClose_ZTest extends OpMode {
 
     public void setPathState(PathState newState) {
         pathState = newState;
+<<<<<<< HEAD
         stateStartTime = getRuntime();
+=======
+       startStateTime = getRuntime();
+>>>>>>> 65aa3776ad84ff1368ff6db04bd95f7b44f01704
     }
 
     @Override

@@ -38,7 +38,10 @@ public class TeleOp2 extends OpMode {
     boolean SquareWasPressed;
     double TargetVelocity;
     double[] Velocity = { 900, 1200, 1500, 2100, 2200, 2300, 2400, 2500};
+<<<<<<< HEAD
 
+=======
+>>>>>>> 65aa3776ad84ff1368ff6db04bd95f7b44f01704
 
     int VelocityIndex = 2;
     ShooterState shooterstate = ShooterState.Idle;
