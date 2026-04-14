@@ -51,15 +51,15 @@ public class Auto_BClose_ZTest extends OpMode {
     private final Pose startPose = new Pose(20.45698166431594, 122.9562764456982, Math.toRadians(140));
     private final Pose shootPose = new Pose(43.20451339915375, 99.77433004231311, Math.toRadians(140));
     private final Pose preloadpose = new Pose(43.471086036671366, 83.90973201692523, Math.toRadians(180));
-    private final Pose load = new Pose(12.728337869246515, 83.8868789606468, Math.toRadians(180));
+    private final Pose load = new Pose(10.497351953753556, 84.08969586205525, Math.toRadians(180));
     private final Pose shoot2 = new Pose(43.473906911142464, 99.81241184767278, Math.toRadians(140));
     private final Pose preload2 = new Pose(43.222849083215806, 59.35966149506348, Math.toRadians(180));
-    private final Pose load2 = new Pose(12.794342358807308, 59.57347583384654, Math.toRadians(180));
+    private final Pose load2 = new Pose(10.563356443314351, 59.776292735254984, Math.toRadians(180));
     private final Pose shoot3 = new Pose(43.56558533145276, 99.5937940761636, Math.toRadians(140));
     private final Pose preload3 = new Pose(43.210155148095915, 35.78843441466854, Math.toRadians(180));
-    private final Pose load3 = new Pose(7.218431037565308, 35.72016130634299, Math.toRadians(180));
-    private final Pose shoot4 = new Pose(43.626234132581104, 99.63187588152329, Math.toRadians(140));
-    private final Pose finalPos = new Pose(62.011267605633805, 119.81867339438604, Math.toRadians(140));
+    private final Pose load3 = new Pose(10.463501460100522, 36.12579510915989, Math.toRadians(180));
+    private final Pose shoot4 = new Pose(43.6262341325811, 99.63187588152329, Math.toRadians(140));
+    private final Pose finalPos = new Pose(71.56800889966031, 119.61585649297761, Math.toRadians(140));
     private PathChain driveStartShoot;
     private PathChain shootPreload;
     private PathChain preloadLoad;
@@ -84,7 +84,6 @@ public class Auto_BClose_ZTest extends OpMode {
         preloadLoad = follower.pathBuilder()
                 .addPath(new BezierLine(preloadpose, load))
                 .setTangentHeadingInterpolation()
-                .addParametricCallback(0.4, () -> follower.setMaxPower(0.5))
                 .build();
         loadShoot1 = follower.pathBuilder()
                 .addPath(new BezierLine(load, shoot2))
@@ -97,7 +96,6 @@ public class Auto_BClose_ZTest extends OpMode {
         preloadLoad2 = follower.pathBuilder()
                 .addPath(new BezierLine(preload2, load2))
                 .setTangentHeadingInterpolation()
-                .addParametricCallback(0.4, () -> follower.setMaxPower(0.5))
                 .build();
         LoadShoot2 = follower.pathBuilder()
                 .addPath(new BezierLine(load2, shoot3))
@@ -110,7 +108,6 @@ public class Auto_BClose_ZTest extends OpMode {
         preloadLoad3 = follower.pathBuilder()
                 .addPath(new BezierLine(preload3, load3))
                 .setTangentHeadingInterpolation()
-                .addParametricCallback(0.4, () -> follower.setMaxPower(0.5))
                 .build();
         LoadShoot3 = follower.pathBuilder()
                 .addPath(new BezierLine(load3, shoot4))
@@ -124,14 +121,15 @@ public class Auto_BClose_ZTest extends OpMode {
     public void statePathUpdate() {
         switch (pathState) {
             case drive_start_shoot:
+                follower.setMaxPower(0.7);
                 follower.followPath(driveStartShoot, true);
                 setPathState(PathState.shoot);
                 break;
 
             case shoot:
-                if (!follower.isBusy() && getRuntime() - stateStartTime > 1) {
-                    Potato1.setVelocity(1400);     //TODO ADD DELAY AND REDUCE SPEED
-                    if (Math.abs(1400 - Potato1.getVelocity()) < 10) {
+                if (!follower.isBusy()) {
+                    Potato1.setVelocity(1200);     //TODO ADD DELAY AND REDUCE SPEED
+                    if (Math.abs(1200 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
 
                         setPathState(PathState.shoot_preload);
@@ -140,7 +138,7 @@ public class Auto_BClose_ZTest extends OpMode {
                 break;
 
             case shoot_preload:
-                if(!follower.isBusy() && getRuntime() - stateStartTime > 4) {
+                if(!follower.isBusy() && getRuntime() - stateStartTime > 3) {
                     intake(0, 0.5);
                     Potato1.setVelocity(0);
                     follower.followPath(shootPreload, true);
@@ -153,6 +151,7 @@ public class Auto_BClose_ZTest extends OpMode {
             case preload_load:
                 if(!follower.isBusy()){
                     intake(1, 1);
+                    follower.setMaxPower(0.5);
                     follower.followPath(preloadLoad, true);
                     setPathState(PathState.load_shoot);
                 }
@@ -161,15 +160,16 @@ public class Auto_BClose_ZTest extends OpMode {
             case load_shoot:
                 if(!follower.isBusy()){
                     intake(0, 0);
+                    follower.setMaxPower(0.7);
                     follower.followPath(loadShoot1, true);
                     setPathState(PathState.shoot2);
                 }
                 break;
 
             case shoot2:
-                if(!follower.isBusy()){
-                    Potato1.setVelocity(1400);
-                    if (Math.abs(1400 - Potato1.getVelocity()) < 10) {
+                if(!follower.isBusy() ){
+                    Potato1.setVelocity(1300);
+                    if (Math.abs(1300 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
                         setPathState(PathState.shoot_preload2);
                     }
@@ -177,7 +177,7 @@ public class Auto_BClose_ZTest extends OpMode {
                 break;
 
             case shoot_preload2:
-                if(!follower.isBusy()){
+                if(!follower.isBusy() && getRuntime() - stateStartTime > 3){
                     intake(0, 0.5);
                     Potato1.setVelocity(0);
                     follower.followPath(shootPreload2, true);
@@ -190,6 +190,7 @@ public class Auto_BClose_ZTest extends OpMode {
             case preload_load2:
                 if(!follower.isBusy()){
                     intake(1, 1);
+                    follower.setMaxPower(0.5);
                     follower.followPath(preloadLoad2, true);
                     setPathState(PathState.load_shoot2);
                 }
@@ -197,6 +198,7 @@ public class Auto_BClose_ZTest extends OpMode {
             case load_shoot2:
                 if(!follower.isBusy()){
                     intake(0, 0);
+                    follower.setMaxPower(0.7);
                     follower.followPath(LoadShoot2, true);
                     setPathState(PathState.shoot3);
                 }
@@ -204,8 +206,8 @@ public class Auto_BClose_ZTest extends OpMode {
 
             case shoot3:
                 if(!follower.isBusy()){
-                    Potato1.setVelocity(1400);
-                    if (Math.abs(1400 - Potato1.getVelocity()) < 10) {
+                    Potato1.setVelocity(1300);
+                    if (Math.abs(1300 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
                         setPathState(PathState.shoot_preload3);
                     }
@@ -213,7 +215,7 @@ public class Auto_BClose_ZTest extends OpMode {
                 break;
 
             case shoot_preload3:
-                if(!follower.isBusy()){
+                if(!follower.isBusy() && getRuntime() - stateStartTime > 3){
                     intake(0, 0.5);
                     Potato1.setVelocity(0);
                     follower.followPath(shootPreload3, true);
@@ -226,6 +228,7 @@ public class Auto_BClose_ZTest extends OpMode {
             case preload_load3:
                 if(!follower.isBusy()){
                     intake(1, 1);
+                    follower.setMaxPower(0.5);
                     follower.followPath(preloadLoad3, true);
                     setPathState(PathState.load_shoot3);
                 }
@@ -234,15 +237,16 @@ public class Auto_BClose_ZTest extends OpMode {
             case load_shoot3:
                 if(!follower.isBusy()){
                     intake(0, 0);
+                    follower.setMaxPower(0.7);
                     follower.followPath(LoadShoot3, true);
                     setPathState(PathState.shoot4);
                 }
                 break;
 
             case shoot4:
-                if(!follower.isBusy()){
-                    Potato1.setVelocity(1400);
-                    if (Math.abs(1400 - Potato1.getVelocity()) < 10) {
+                if(!follower.isBusy() ){
+                    Potato1.setVelocity(1300);
+                    if (Math.abs(1300 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
                         setPathState(PathState.shoot_final);
                     }
@@ -250,7 +254,7 @@ public class Auto_BClose_ZTest extends OpMode {
                 break;
 
             case shoot_final:
-                if(!follower.isBusy()){
+                if(!follower.isBusy() && getRuntime() - stateStartTime > 3){
                     intake(0,0);
                     Potato1.setVelocity(0);
                     follower.followPath(ShootFinal);
