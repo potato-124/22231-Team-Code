@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
-@Autonomous 
+@Autonomous
 public class Auto_RClose extends OpMode {
     double startStateTime = 0;
     private DcMotorEx Potato1;
