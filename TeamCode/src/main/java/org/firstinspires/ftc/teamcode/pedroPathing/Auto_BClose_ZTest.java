@@ -55,11 +55,11 @@ public class Auto_BClose_ZTest extends OpMode {
     private final Pose shoot2 = new Pose(43.473906911142464, 99.81241184767278, Math.toRadians(140));
     private final Pose preload2 = new Pose(43.222849083215806, 59.35966149506348, Math.toRadians(180));
     private final Pose load2 = new Pose(10.563356443314351, 59.776292735254984, Math.toRadians(180));
-    private final Pose shoot3 = new Pose(43.56558533145276, 99.5937940761636, Math.toRadians(140));
+    private final Pose shoot3 = new Pose(71.56800889966031, 119.61585649297761, Math.toRadians(140));
     private final Pose preload3 = new Pose(43.210155148095915, 35.78843441466854, Math.toRadians(180));
     private final Pose load3 = new Pose(10.463501460100522, 36.12579510915989, Math.toRadians(180));
-    private final Pose shoot4 = new Pose(43.6262341325811, 99.63187588152329, Math.toRadians(140));
-    private final Pose finalPos = new Pose(71.56800889966031, 119.61585649297761, Math.toRadians(140));
+    private final Pose shoot4 = new Pose(71.56800889966031, 119.61585649297761, Math.toRadians(140));
+    private final Pose finalPos = new Pose(86.77927650529412, 123.67219452114661, Math.toRadians(140));
     private PathChain driveStartShoot;
     private PathChain shootPreload;
     private PathChain preloadLoad;

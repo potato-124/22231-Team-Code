@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 @Autonomous
 public class Auto_RClose extends OpMode {
-    double startStateTime = 0;
+    double stateStartTime = 0;
     private DcMotorEx Potato1;
     private DcMotorEx Potato2;
     private DcMotorEx Potato3;
@@ -53,15 +53,15 @@ public class Auto_RClose extends OpMode {
     private final Pose startPose = new Pose(123.54301833568407, 122.3469675599436, Math.toRadians(40));
     private final Pose shootPose = new Pose(100.59238363892806, 99.77433004231312, Math.toRadians(40));
     private final Pose preloadpose = new Pose(100.52891396332863, 83.90973201692523, Math.toRadians(0));
-    private final Pose load = new Pose(131.88011283497883, 83.68406205923836, Math.toRadians(0));
+    private final Pose load = new Pose(134.92236635610564, 83.68406205923836, Math.toRadians(0));
     private final Pose shoot2 = new Pose(100.52609308885754, 99.81241184767278, Math.toRadians(40));
     private final Pose preload2 = new Pose(100.7771509167842, 59.35966149506348, Math.toRadians(0));
-    private final Pose load2 = new Pose(132.0169252468265, 59.16784203102963, Math.toRadians(0));
-    private final Pose shoot3 = new Pose(100.43441466854725, 99.5937940761636, Math.toRadians(40));
+    private final Pose load2 = new Pose(135.26199566936174, 59.16784203102963, Math.toRadians(0));
+    private final Pose shoot3 = new Pose(91.04418840263016, 108.15018574067821, Math.toRadians(40));
     private final Pose preload3 = new Pose(100.78984485190409, 35.78843441466854, Math.toRadians(0));
-    private final Pose load3 = new Pose(131.91396332863187, 35.31452750352609, Math.toRadians(0));
-    private final Pose shoot4 = new Pose(100.3737658674189, 99.63187588152329, Math.toRadians(40));
-    private final Pose finalPos = new Pose(99.63187588152329, 108.25811001410436, Math.toRadians(40));
+    private final Pose load3 = new Pose(135.15903375116707, 35.92297820775144, Math.toRadians(0));
+    private final Pose shoot4 = new Pose(91.04418840263016, 108.15018574067821, Math.toRadians(40));
+    private final Pose finalPos = new Pose(74.05452631160729, 134.0158564929776, Math.toRadians(40));
     private PathChain driveStartShoot;
     private PathChain shootPreload;
     private PathChain preloadLoad;
@@ -123,14 +123,15 @@ public class Auto_RClose extends OpMode {
     public void statePathUpdate() {
         switch (pathState) {
             case drive_start_shoot:
+                follower.setMaxPower(0.7);
                 follower.followPath(driveStartShoot, true);
                 setPathState(Auto_RClose.PathState.shoot);
                 break;
 
             case shoot:
                 if (!follower.isBusy()) {
-                    Potato1.setVelocity(1400);
-                    if (Math.abs(1400 - Potato1.getVelocity()) < 10) {
+                    Potato1.setVelocity(1200);
+                    if (Math.abs(1200 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
 
                         setPathState(Auto_RClose.PathState.shoot_preload);
@@ -139,7 +140,7 @@ public class Auto_RClose extends OpMode {
                 break;
 
             case shoot_preload:
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && getRuntime() - stateStartTime > 3) {
                     intake(0, 0.5);
                     Potato1.setVelocity(0);
                     follower.followPath(shootPreload, true);
@@ -151,6 +152,7 @@ public class Auto_RClose extends OpMode {
             case preload_load:
                 if(!follower.isBusy()){
                     intake(1, 1);
+                    follower.setMaxPower(0.5);
                     follower.followPath(preloadLoad, true);
                     setPathState(Auto_RClose.PathState.load_shoot);
                 }
@@ -159,6 +161,7 @@ public class Auto_RClose extends OpMode {
             case load_shoot:
                 if(!follower.isBusy()){
                     intake(0, 0);
+                    follower.setMaxPower(0.7);
                     follower.followPath(loadShoot1, true);
                     setPathState(Auto_RClose.PathState.shoot2);
                 }
@@ -166,8 +169,8 @@ public class Auto_RClose extends OpMode {
 
             case shoot2:
                 if(!follower.isBusy()){
-                    Potato1.setVelocity(1400);
-                    if (Math.abs(1400 - Potato1.getVelocity()) < 10) {
+                    Potato1.setVelocity(1200);
+                    if (Math.abs(1200 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
                         setPathState(Auto_RClose.PathState.shoot_preload2);
                     }
@@ -175,7 +178,7 @@ public class Auto_RClose extends OpMode {
                 break;
 
             case shoot_preload2:
-                if(!follower.isBusy()){
+                if(!follower.isBusy()&& getRuntime() - stateStartTime > 3){
                     intake(0, 0.5);
                     Potato1.setVelocity(0);
                     follower.followPath(shootPreload2, true);
@@ -187,6 +190,7 @@ public class Auto_RClose extends OpMode {
             case preload_load2:
                 if(!follower.isBusy()){
                     intake(1, 1);
+                    follower.setMaxPower(0.5);
                     follower.followPath(preloadLoad2, true);
                     setPathState(Auto_RClose.PathState.load_shoot2);
                 }
@@ -194,6 +198,7 @@ public class Auto_RClose extends OpMode {
             case load_shoot2:
                 if(!follower.isBusy()){
                     intake(0, 0);
+                    follower.setMaxPower(0.7);
                     follower.followPath(LoadShoot2, true);
                     setPathState(Auto_RClose.PathState.shoot3);
                 }
@@ -201,8 +206,8 @@ public class Auto_RClose extends OpMode {
 
             case shoot3:
                 if(!follower.isBusy()){
-                    Potato1.setVelocity(1400);
-                    if (Math.abs(1400 - Potato1.getVelocity()) < 10) {
+                    Potato1.setVelocity(1200);
+                    if (Math.abs(1200 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
                         setPathState(Auto_RClose.PathState.shoot_preload3);
                     }
@@ -210,7 +215,7 @@ public class Auto_RClose extends OpMode {
                 break;
 
             case shoot_preload3:
-                if(!follower.isBusy()){
+                if(!follower.isBusy() && getRuntime() - stateStartTime > 3){
                     intake(0, 0.5);
                     Potato1.setVelocity(0);
                     follower.followPath(shootPreload3, true);
@@ -222,6 +227,7 @@ public class Auto_RClose extends OpMode {
             case preload_load3:
                 if(!follower.isBusy()){
                     intake(1, 1);
+                    follower.setMaxPower(0.5);
                     follower.followPath(preloadLoad3, true);
                     setPathState(Auto_RClose.PathState.load_shoot3);
                 }
@@ -230,6 +236,7 @@ public class Auto_RClose extends OpMode {
             case load_shoot3:
                 if(!follower.isBusy()){
                     intake(0, 0);
+                    follower.setMaxPower(0.7);
                     follower.followPath(LoadShoot3, true);
                     setPathState(Auto_RClose.PathState.shoot4);
                 }
@@ -237,8 +244,8 @@ public class Auto_RClose extends OpMode {
 
             case shoot4:
                 if(!follower.isBusy()){
-                    Potato1.setVelocity(1400);
-                    if (Math.abs(1400 - Potato1.getVelocity()) < 10) {
+                    Potato1.setVelocity(1200);
+                    if (Math.abs(1200 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
                         setPathState(Auto_RClose.PathState.shoot_final);
                     }
@@ -246,7 +253,7 @@ public class Auto_RClose extends OpMode {
                 break;
 
             case shoot_final:
-                if(!follower.isBusy()){
+                if(!follower.isBusy() && getRuntime() - stateStartTime > 3){
                     intake(0,0);
                     Potato1.setVelocity(0);
                     follower.followPath(ShootFinal);
@@ -266,7 +273,7 @@ public class Auto_RClose extends OpMode {
 
     public void setPathState(Auto_RClose.PathState newState) {
         pathState = newState;
-        pathTimer.resetTimer();
+        stateStartTime = getRuntime();
     }
 
     @Override
