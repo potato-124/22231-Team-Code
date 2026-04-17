@@ -128,8 +128,8 @@ public class Auto_BClose_ZTest extends OpMode {
 
             case shoot:
                 if (!follower.isBusy()) {
-                    Potato1.setVelocity(1200);     //TODO ADD DELAY AND REDUCE SPEED
-                    if (Math.abs(1200 - Potato1.getVelocity()) < 10) {
+                    Potato1.setVelocity(1400);     //TODO ADD DELAY AND REDUCE SPEED
+                    if (Math.abs(1400 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
 
                         setPathState(PathState.shoot_preload);
