@@ -52,16 +52,16 @@ public class Auto_RClose extends OpMode {
     Auto_RClose.PathState pathState;
     private final Pose startPose = new Pose(123.54301833568407, 122.3469675599436, Math.toRadians(40));
     private final Pose shootPose = new Pose(100.59238363892806, 99.77433004231312, Math.toRadians(40));
-    private final Pose preloadpose = new Pose(100.52891396332863, 78.90973201692523, Math.toRadians(0));
-    private final Pose load = new Pose(134.92236635610564, 78.68406205923836, Math.toRadians(0));
-    private final Pose shoot2 = new Pose(96.77574047954866, 103.99294781382228, Math.toRadians(42));
-    private final Pose preload2 = new Pose(100.7771509167842, 49.35966149506348, Math.toRadians(0));
-    private final Pose load2 = new Pose(135.26199566936174, 49.16784203102963, Math.toRadians(0));
-    private final Pose shoot3 = new Pose(91.91960507757406, 108.73060648801129, Math.toRadians(46));
-    private final Pose preload3 = new Pose(100.78984485190409, 20.78843441466854, Math.toRadians(0));
-    private final Pose load3 = new Pose(135.15903375116707, 20.92297820775144, Math.toRadians(0));
-    private final Pose shoot4 = new Pose(75.39915373765868, 120.17066290550069, Math.toRadians(50));
-    private final Pose finalPos = new Pose(70.8688293370945, 125.03385049365303, Math.toRadians(40));
+    private final Pose preloadpose = new Pose(100.52891396332863, 83.90973201692523, Math.toRadians(350));
+    private final Pose load = new Pose(130.88011283497883, 83.68406205923836, Math.toRadians(350));
+    private final Pose shoot2 = new Pose(100.52609308885754, 99.81241184767278, Math.toRadians(44));
+    private final Pose preload2 = new Pose(100.7771509167842, 59.35966149506348, Math.toRadians(358));
+    private final Pose load2 = new Pose(130.91396332863187, 59.16784203102963, Math.toRadians(358));
+    private final Pose shoot3 = new Pose(95.55994358251058, 107.51480959097319, Math.toRadians(42));
+    private final Pose preload3 = new Pose(100.78984485190409, 35.78843441466854, Math.toRadians(355));
+    private final Pose load3 = new Pose(130.91396332863187, 35.31452750352609, Math.toRadians(355));
+    private final Pose shoot4 = new Pose(87.17207334273624, 111.81805359661496, Math.toRadians(46));
+    private final Pose finalPos = new Pose(60.21720733427362, 126.94358251057827, Math.toRadians(46));
     private PathChain driveStartShoot;
     private PathChain shootPreload;
     private PathChain preloadLoad;
@@ -85,7 +85,7 @@ public class Auto_RClose extends OpMode {
                 .build();
         preloadLoad = follower.pathBuilder()
                 .addPath(new BezierLine(preloadpose, load))
-                .setTangentHeadingInterpolation()
+                .setLinearHeadingInterpolation(preloadpose.getHeading(), load.getHeading())
                 .build();
         loadShoot1 = follower.pathBuilder()
                 .addPath(new BezierLine(load, shoot2))
@@ -97,7 +97,7 @@ public class Auto_RClose extends OpMode {
                 .build();
         preloadLoad2 = follower.pathBuilder()
                 .addPath(new BezierLine(preload2, load2))
-                .setTangentHeadingInterpolation()
+                .setLinearHeadingInterpolation(preload2.getHeading(), load2.getHeading())
                 .build();
         LoadShoot2 = follower.pathBuilder()
                 .addPath(new BezierLine(load2, shoot3))
@@ -109,7 +109,7 @@ public class Auto_RClose extends OpMode {
                 .build();
         preloadLoad3 = follower.pathBuilder()
                 .addPath(new BezierLine(preload3, load3))
-                .setTangentHeadingInterpolation()
+                .setLinearHeadingInterpolation(preload3.getHeading(), load3.getHeading())
                 .build();
         LoadShoot3 = follower.pathBuilder()
                 .addPath(new BezierLine(load3, shoot4))

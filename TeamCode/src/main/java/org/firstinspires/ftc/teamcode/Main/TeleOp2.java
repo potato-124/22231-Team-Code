@@ -37,7 +37,7 @@ public class TeleOp2 extends OpMode {
     boolean CircleWasPressed;
     boolean SquareWasPressed;
     double TargetVelocity;
-    double[] Velocity = { 900, 1200, 1500, 2100, 2200, 2300, 2400, 2500};
+    double[] Velocity = {  1100, 1200,1250, 1300,1400, 2000, 2100, 2200};
 
 
     int VelocityIndex = 2;

@@ -48,18 +48,18 @@ public class Auto_BClose_ZTest extends OpMode {
     }
 
     PathState pathState;
-    private final Pose startPose = new Pose(20.45698166431594, 122.9562764456982, Math.toRadians(140));
-    private final Pose shootPose = new Pose(43.20451339915375, 99.77433004231311, Math.toRadians(140));
-    private final Pose preloadpose = new Pose(43.471086036671366, 83.90973201692523, Math.toRadians(180));
-    private final Pose load = new Pose(10.497351953753556, 84.08969586205525, Math.toRadians(180));
+    private final Pose startPose = new Pose(20.456981664315933, 122.3469675599436, Math.toRadians(140));
+    private final Pose shootPose = new Pose(43.407616361071945, 99.77433004231312, Math.toRadians(140));
+    private final Pose preloadpose = new Pose(43.471086036671366, 80.90973201692523, Math.toRadians(185));
+    private final Pose load = new Pose(15.572637517630477, 80.68406205923836, Math.toRadians(185));
     private final Pose shoot2 = new Pose(43.473906911142464, 99.81241184767278, Math.toRadians(140));
-    private final Pose preload2 = new Pose(43.222849083215806, 59.35966149506348, Math.toRadians(180));
-    private final Pose load2 = new Pose(10.563356443314351, 59.776292735254984, Math.toRadians(180));
-    private final Pose shoot3 = new Pose(71.56800889966031, 119.61585649297761, Math.toRadians(140));
-    private final Pose preload3 = new Pose(43.210155148095915, 35.78843441466854, Math.toRadians(180));
-    private final Pose load3 = new Pose(10.463501460100522, 36.12579510915989, Math.toRadians(180));
-    private final Pose shoot4 = new Pose(71.56800889966031, 119.61585649297761, Math.toRadians(140));
-    private final Pose finalPos = new Pose(86.77927650529412, 123.67219452114661, Math.toRadians(140));
+    private final Pose preload2 = new Pose(44.222849083215806, 56.35966149506348, Math.toRadians(189));
+    private final Pose load2 = new Pose(20.482369534555737, 56.57404795486602, Math.toRadians(189));
+    private final Pose shoot3 = new Pose(47.83074753173483, 106.70239774330041, Math.toRadians(140));
+    private final Pose preload3 = new Pose(45.21015514809591, 30.78843441466854, Math.toRadians(189));
+    private final Pose load3 = new Pose(20.772919605077572, 30.51763046544428, Math.toRadians(189));
+    private final Pose shoot4 = new Pose(56.82792665726376, 111.81805359661496, Math.toRadians(140));
+    private final Pose finalPos = new Pose(83.78279266572639, 126.94358251057827, Math.toRadians(140));
     private PathChain driveStartShoot;
     private PathChain shootPreload;
     private PathChain preloadLoad;
