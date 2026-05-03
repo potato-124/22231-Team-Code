@@ -37,10 +37,10 @@ public class TeleOp2 extends OpMode {
     boolean CircleWasPressed;
     boolean SquareWasPressed;
     double TargetVelocity;
-    double[] Velocity = {  1100, 1200,1250, 1300,1400, 2000, 2100, 2200};
+    double[] Velocity = {  1250, 1300,1400,1500,1600, 2000, 2100};
 
 
-    int VelocityIndex = 2;
+    int VelocityIndex = 3;
     ShooterState shooterstate = ShooterState.Idle;
     double StateStartTime = 0;
     boolean motorIsRevving = false;
@@ -241,7 +241,7 @@ public class TeleOp2 extends OpMode {
                 }
                 break;
             case Calibration:
-                if (error < 5 && error > -5) {
+                if (error < 10 && error > -10) {
                     shooterstate = ShooterState.Shoot;
                     StateStartTime = getRuntime();
                 }

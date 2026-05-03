@@ -52,16 +52,16 @@ public class Auto_RClose extends OpMode {
     Auto_RClose.PathState pathState;
     private final Pose startPose = new Pose(123.54301833568407, 122.3469675599436, Math.toRadians(40));
     private final Pose shootPose = new Pose(100.59238363892806, 99.77433004231312, Math.toRadians(40));
-    private final Pose preloadpose = new Pose(100.52891396332863, 83.90973201692523, Math.toRadians(350));
-    private final Pose load = new Pose(130.88011283497883, 83.68406205923836, Math.toRadians(350));
-    private final Pose shoot2 = new Pose(100.52609308885754, 99.81241184767278, Math.toRadians(44));
-    private final Pose preload2 = new Pose(100.7771509167842, 59.35966149506348, Math.toRadians(358));
-    private final Pose load2 = new Pose(130.91396332863187, 59.16784203102963, Math.toRadians(358));
-    private final Pose shoot3 = new Pose(95.55994358251058, 107.51480959097319, Math.toRadians(42));
-    private final Pose preload3 = new Pose(100.78984485190409, 35.78843441466854, Math.toRadians(355));
-    private final Pose load3 = new Pose(130.91396332863187, 35.31452750352609, Math.toRadians(355));
-    private final Pose shoot4 = new Pose(87.17207334273624, 111.81805359661496, Math.toRadians(46));
-    private final Pose finalPos = new Pose(60.21720733427362, 126.94358251057827, Math.toRadians(46));
+    private final Pose preloadpose = new Pose(99.52891396332863, 83.90973201692523, Math.toRadians(355));
+    private final Pose load = new Pose(135.88011283497883, 83.68406205923836, Math.toRadians(355));
+    private final Pose shoot2 = new Pose(102.52609308885754, 101.81241184767278, Math.toRadians(42));
+    private final Pose preload2 = new Pose(99.7771509167842, 54.35966149506348, Math.toRadians(352));
+    private final Pose load2 = new Pose(135.91396332863187, 54.16784203102963, Math.toRadians(352));
+    private final Pose shoot3 = new Pose(102.55994358251058, 107.51480959097319, Math.toRadians(42));
+    private final Pose preload3 = new Pose(99.78984485190409, 31.78843441466854, Math.toRadians(352));
+    private final Pose load3 = new Pose(135.91396332863187, 31.31452750352609, Math.toRadians(352));
+    private final Pose shoot4 = new Pose(100.17207334273624, 111.81805359661496, Math.toRadians(43));
+    private final Pose finalPos = new Pose(75.21720733427362, 126.94358251057827, Math.toRadians(43));
     private PathChain driveStartShoot;
     private PathChain shootPreload;
     private PathChain preloadLoad;
@@ -130,8 +130,8 @@ public class Auto_RClose extends OpMode {
 
             case shoot:
                 if (!follower.isBusy()) {
-                    Potato1.setVelocity(1300);
-                    if (Math.abs(1300 - Potato1.getVelocity()) < 10) {
+                    Potato1.setVelocity(1200);
+                    if (Math.abs(1200 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
 
                         setPathState(Auto_RClose.PathState.shoot_preload);
@@ -169,8 +169,8 @@ public class Auto_RClose extends OpMode {
 
             case shoot2:
                 if(!follower.isBusy()){
-                    Potato1.setVelocity(1300);
-                    if (Math.abs(1300 - Potato1.getVelocity()) < 10) {
+                    Potato1.setVelocity(1200);
+                    if (Math.abs(1200 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
                         setPathState(Auto_RClose.PathState.shoot_preload2);
                     }
@@ -206,8 +206,8 @@ public class Auto_RClose extends OpMode {
 
             case shoot3:
                 if(!follower.isBusy()){
-                    Potato1.setVelocity(1300);
-                    if (Math.abs(1300 - Potato1.getVelocity()) < 10) {
+                    Potato1.setVelocity(1200);
+                    if (Math.abs(1200 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
                         setPathState(Auto_RClose.PathState.shoot_preload3);
                     }
@@ -244,8 +244,8 @@ public class Auto_RClose extends OpMode {
 
             case shoot4:
                 if(!follower.isBusy()){
-                    Potato1.setVelocity(1300);
-                    if (Math.abs(1300 - Potato1.getVelocity()) < 10) {
+                    Potato1.setVelocity(1200);
+                    if (Math.abs(1200 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
                         setPathState(Auto_RClose.PathState.shoot_final);
                     }

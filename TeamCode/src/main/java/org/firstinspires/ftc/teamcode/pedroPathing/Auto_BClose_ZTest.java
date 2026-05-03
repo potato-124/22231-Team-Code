@@ -48,18 +48,18 @@ public class Auto_BClose_ZTest extends OpMode {
     }
 
     PathState pathState;
-    private final Pose startPose = new Pose(20.456981664315933, 122.3469675599436, Math.toRadians(140));
-    private final Pose shootPose = new Pose(43.407616361071945, 99.77433004231312, Math.toRadians(140));
-    private final Pose preloadpose = new Pose(43.471086036671366, 80.90973201692523, Math.toRadians(185));
-    private final Pose load = new Pose(15.572637517630477, 80.68406205923836, Math.toRadians(185));
-    private final Pose shoot2 = new Pose(43.473906911142464, 99.81241184767278, Math.toRadians(140));
-    private final Pose preload2 = new Pose(44.222849083215806, 56.35966149506348, Math.toRadians(189));
-    private final Pose load2 = new Pose(20.482369534555737, 56.57404795486602, Math.toRadians(189));
-    private final Pose shoot3 = new Pose(47.83074753173483, 106.70239774330041, Math.toRadians(140));
-    private final Pose preload3 = new Pose(45.21015514809591, 30.78843441466854, Math.toRadians(189));
-    private final Pose load3 = new Pose(20.772919605077572, 30.51763046544428, Math.toRadians(189));
-    private final Pose shoot4 = new Pose(56.82792665726376, 111.81805359661496, Math.toRadians(140));
-    private final Pose finalPos = new Pose(83.78279266572639, 126.94358251057827, Math.toRadians(140));
+    private final Pose startPose = new Pose(20.456981664315933, 122.3469675599436, Math.toRadians(137));
+    private final Pose shootPose = new Pose(43.407616361071945, 99.77433004231312, Math.toRadians(137));
+    private final Pose preloadpose = new Pose(43.471086036671366, 80.90973201692523, Math.toRadians(180));
+    private final Pose load = new Pose(13.572637517630477, 80.68406205923836, Math.toRadians(180));
+    private final Pose shoot2 = new Pose(43.473906911142464, 99.81241184767278, Math.toRadians(137));
+    private final Pose preload2 = new Pose(44.222849083215806, 56.35966149506348, Math.toRadians(183));
+    private final Pose load2 = new Pose(15.482369534555737, 56.57404795486602, Math.toRadians(183));
+    private final Pose shoot3 = new Pose(47.83074753173483, 106.70239774330041, Math.toRadians(137));
+    private final Pose preload3 = new Pose(45.21015514809591, 27.78843441466854, Math.toRadians(183));
+    private final Pose load3 = new Pose(15.772919605077572, 30.51763046544428, Math.toRadians(183));
+    private final Pose shoot4 = new Pose(56.82792665726376, 111.81805359661496, Math.toRadians(137));
+    private final Pose finalPos = new Pose(83.78279266572639, 126.94358251057827, Math.toRadians(137));
     private PathChain driveStartShoot;
     private PathChain shootPreload;
     private PathChain preloadLoad;
@@ -128,8 +128,8 @@ public class Auto_BClose_ZTest extends OpMode {
 
             case shoot:
                 if (!follower.isBusy()) {
-                    Potato1.setVelocity(1400);     //TODO ADD DELAY AND REDUCE SPEED
-                    if (Math.abs(1400 - Potato1.getVelocity()) < 10) {
+                    Potato1.setVelocity(1300);
+                    if (Math.abs(1300 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
 
                         setPathState(PathState.shoot_preload);

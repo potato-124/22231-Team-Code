@@ -102,8 +102,8 @@ public class Auto_BFar extends OpMode {
         switch (pathState){
             case shoot:
                 if(!follower.isBusy() ){
-                    Potato1.setVelocity(1300);
-                    if (Math.abs(1300 - Potato1.getVelocity()) < 10) {
+                    Potato1.setVelocity(2100);
+                    if (Math.abs(2100 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
                         setPathState(PathState.shoot_preload);
                     }
@@ -116,104 +116,104 @@ public class Auto_BFar extends OpMode {
                     follower.followPath(ShootPreload, true);
                     setPathState(PathState.preload_load);
                     telemetry.addLine("Done Path 1");
-                    setPathState(PathState.preload_load);
+                    setPathState(PathState.Default);
                 }
                 break;
-            case preload_load:
-                if(!follower.isBusy()){
-                    intake(1, 1);
-                    follower.setMaxPower(0.5);
-                    follower.followPath(PreloadLoad, true);
-                    setPathState(PathState.load_shoot);
-                }
-                break;
-            case load_shoot:
-                if(!follower.isBusy()){
-                    intake(0, 0);
-                    follower.setMaxPower(0.7);
-                    follower.followPath(LoadShoot, true);
-                    setPathState(PathState.shoot2);
-                }
-                break;
-            case shoot2:
-                if(!follower.isBusy() ){
-                    Potato1.setVelocity(1300);
-                    if (Math.abs(1300 - Potato1.getVelocity()) < 10) {
-                        intake(1, 1);
-                        setPathState(PathState.shoot_preload2);
-                    }
-                }
-                break;
-            case shoot_preload2:
-                if(!follower.isBusy() && getRuntime() - stateStartTime > 3) {
-                    intake(0, 0.5);
-                    Potato1.setVelocity(0);
-                    follower.followPath(ShootPreload2, true);
-                    setPathState(PathState.preload_load2);
-                    telemetry.addLine("Done Path 2");
-                    setPathState(PathState.preload_load2);
-                }
-                break;
-            case preload_load2:
-                if(!follower.isBusy()){
-                    intake(1, 1);
-                    follower.setMaxPower(0.5);
-                    follower.followPath(PreloadLoad2, true);
-                    setPathState(PathState.load_shoot2);
-                }
-                break;
-            case load_shoot2:
-                if(!follower.isBusy()){
-                    intake(0, 0);
-                    follower.setMaxPower(0.7);
-                    follower.followPath(LoadShoot2, true);
-                    setPathState(PathState.shoot3);
-                }
-                break;
-            case shoot3:
-                if(!follower.isBusy() ){
-                    Potato1.setVelocity(1300);
-                    if (Math.abs(1300 - Potato1.getVelocity()) < 10) {
-                        intake(1, 1);
-                        setPathState(PathState.shoot_preload3);
-                    }
-                }
-                break;
-            case shoot_preload3:
-                if(!follower.isBusy() && getRuntime() - stateStartTime > 3) {
-                    intake(0, 0.5);
-                    Potato1.setVelocity(0);
-                    follower.followPath(ShootPreload3, true);
-                    setPathState(PathState.preload_load3);
-                    telemetry.addLine("Done Path 1");
-                    setPathState(PathState.preload_load3);
-                }
-                break;
-            case preload_load3:
-                if(!follower.isBusy()){
-                    intake(1, 1);
-                    follower.setMaxPower(0.5);
-                    follower.followPath(PreloadLoad3, true);
-                    setPathState(PathState.load_shoot3);
-                }
-                break;
-            case load_shoot3:
-                if(!follower.isBusy()){
-                    intake(0, 0);
-                    follower.setMaxPower(0.7);
-                    follower.followPath(LoadShoot3, true);
-                    setPathState(PathState.shoot4);
-                }
-                break;
-            case shoot4:
-                if(!follower.isBusy() ){
-                    Potato1.setVelocity(1300);
-                    if (Math.abs(1300 - Potato1.getVelocity()) < 10) {
-                        intake(1, 1);
-                        setPathState(PathState.Default);
-                    }
-                }
-                break;
+//            case preload_load:
+//                if(!follower.isBusy()){
+//                    intake(1, 1);
+//                    follower.setMaxPower(0.5);
+//                    follower.followPath(PreloadLoad, true);
+//                    setPathState(PathState.load_shoot);
+//                }
+//                break;
+//            case load_shoot:
+//                if(!follower.isBusy()){
+//                    intake(0, 0);
+//                    follower.setMaxPower(0.7);
+//                    follower.followPath(LoadShoot, true);
+//                    setPathState(PathState.shoot2);
+//                }
+//                break;
+//            case shoot2:
+//                if(!follower.isBusy() ){
+//                    Potato1.setVelocity(1900);
+//                    if (Math.abs(1900 - Potato1.getVelocity()) < 10) {
+//                        intake(1, 1);
+//                        setPathState(PathState.shoot_preload2);
+//                    }
+//                }
+//                break;
+//            case shoot_preload2:
+//                if(!follower.isBusy() && getRuntime() - stateStartTime > 3) {
+//                    intake(0, 0.5);
+//                    Potato1.setVelocity(0);
+//                    follower.followPath(ShootPreload2, true);
+//                    setPathState(PathState.preload_load2);
+//                    telemetry.addLine("Done Path 2");
+//                    setPathState(PathState.preload_load2);
+//                }
+//                break;
+//            case preload_load2:
+//                if(!follower.isBusy()){
+//                    intake(1, 1);
+//                    follower.setMaxPower(0.5);
+//                    follower.followPath(PreloadLoad2, true);
+//                    setPathState(PathState.load_shoot2);
+//                }
+//                break;
+//            case load_shoot2:
+//                if(!follower.isBusy()){
+//                    intake(0, 0);
+//                    follower.setMaxPower(0.7);
+//                    follower.followPath(LoadShoot2, true);
+//                    setPathState(PathState.shoot3);
+//                }
+//                break;
+//            case shoot3:
+//                if(!follower.isBusy() ){
+//                    Potato1.setVelocity(1900);
+//                    if (Math.abs(1900 - Potato1.getVelocity()) < 10) {
+//                        intake(1, 1);
+//                        setPathState(PathState.shoot_preload3);
+//                    }
+//                }
+//                break;
+//            case shoot_preload3:
+//                if(!follower.isBusy() && getRuntime() - stateStartTime > 3) {
+//                    intake(0, 0.5);
+//                    Potato1.setVelocity(0);
+//                    follower.followPath(ShootPreload3, true);
+//                    setPathState(PathState.preload_load3);
+//                    telemetry.addLine("Done Path 1");
+//                    setPathState(PathState.preload_load3);
+//                }
+//                break;
+//            case preload_load3:
+//                if(!follower.isBusy()){
+//                    intake(1, 1);
+//                    follower.setMaxPower(0.5);
+//                    follower.followPath(PreloadLoad3, true);
+//                    setPathState(PathState.load_shoot3);
+//                }
+//                break;
+//            case load_shoot3:
+//                if(!follower.isBusy()){
+//                    intake(0, 0);
+//                    follower.setMaxPower(0.7);
+//                    follower.followPath(LoadShoot3, true);
+//                    setPathState(PathState.shoot4);
+//                }
+//                break;
+//            case shoot4:
+//                if(!follower.isBusy() ){
+//                    Potato1.setVelocity(1900);
+//                    if (Math.abs(1900 - Potato1.getVelocity()) < 10) {
+//                        intake(1, 1);
+//                        setPathState(PathState.Default);
+//                    }
+//                }
+               // break;
             case Default:
                 telemetry.addLine("No state commanded");
                 break;
