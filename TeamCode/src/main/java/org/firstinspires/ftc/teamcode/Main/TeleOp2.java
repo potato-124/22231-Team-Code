@@ -37,10 +37,10 @@ public class TeleOp2 extends OpMode {
     boolean CircleWasPressed;
     boolean SquareWasPressed;
     double TargetVelocity;
-    double[] Velocity = {  1250, 1300,1400,1500,1600, 2000, 2100};
+    double[] Velocity = {1300,1400, 1450, 1800, 2100};
 
 
-    int VelocityIndex = 3;
+    int VelocityIndex = 0;
     ShooterState shooterstate = ShooterState.Idle;
     double StateStartTime = 0;
     boolean motorIsRevving = false;
@@ -185,6 +185,7 @@ public class TeleOp2 extends OpMode {
         }
 
 
+
         error = TargetVelocity - Potato1.getVelocity();
 
 
@@ -213,14 +214,17 @@ public class TeleOp2 extends OpMode {
                 } else {
                     Potato3.setPower(0);
                 }
-
-
-
-                if (gamepad1.right_trigger > 0.1) {
-                    Potato1.setVelocity(TargetVelocity);
-                    StateStartTime = getRuntime();
-                    shooterstate = ShooterState.Calibration;      //State transition into calibration state
+                if (gamepad1.right_bumper) {
+                    VelocityIndex = 0;
                 }
+                if (gamepad1.right_trigger > 0.1) {
+                    VelocityIndex = 1;
+                }
+
+
+
+
+
 
 
                 if (shooterstate == ShooterState.Idle) {

@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous
-public class Auto_BClose_ZTest extends OpMode {
+public class Auto_BClose extends OpMode {
     double stateStartTime = 0;
     private DcMotorEx Potato1;
     private DcMotorEx Potato2;
@@ -35,6 +35,7 @@ public class Auto_BClose_ZTest extends OpMode {
         shoot2,
         shoot_preload2,
         preload_load2,
+        load2_loadadjust,
         load_shoot2,
         shoot3,
         shoot_preload3,
@@ -50,15 +51,17 @@ public class Auto_BClose_ZTest extends OpMode {
     PathState pathState;
     private final Pose startPose = new Pose(20.456981664315933, 122.3469675599436, Math.toRadians(137));
     private final Pose shootPose = new Pose(43.407616361071945, 99.77433004231312, Math.toRadians(137));
-    private final Pose preloadpose = new Pose(43.471086036671366, 80.90973201692523, Math.toRadians(180));
-    private final Pose load = new Pose(13.572637517630477, 80.68406205923836, Math.toRadians(180));
-    private final Pose shoot2 = new Pose(44.473906911142464, 97.81241184767278, Math.toRadians(137));
-    private final Pose preload2 = new Pose(43.222849083215806, 52.35966149506348, Math.toRadians(183));
-    private final Pose load2 = new Pose(5.482369534555737, 52.57404795486602, Math.toRadians(183));
-    private final Pose shoot3 = new Pose(45.83074753173483, 102.70239774330041, Math.toRadians(137));
+    private final Pose preloadpose = new Pose(43.471086036671366, 77.90973201692523, Math.toRadians(180));
+    private final Pose load = new Pose(13.572637517630477, 77.68406205923836, Math.toRadians(180));
+    private final Pose shoot2 = new Pose(44.473906911142464, 97.81241184767278, Math.toRadians(125));
+    private final Pose preload2 = new Pose(43.222849083215806, 46.35966149506348, Math.toRadians(183));
+    private final Pose load2 = new Pose(8.482369534555737, 46.57404795486602, Math.toRadians(183));
+    private final Pose loadadjust = new Pose(8.482369534555737, 40.57404795486602, Math.toRadians(183));
+
+    private final Pose shoot3 = new Pose(44.83074753173483, 102.70239774330041, Math.toRadians(118));
     private final Pose preload3 = new Pose(40.21015514809591, 23.78843441466854, Math.toRadians(183));
-    private final Pose load3 = new Pose(9.772919605077572, 24.51763046544428, Math.toRadians(183));
-    private final Pose shoot4 = new Pose(58.82792665726376, 113.81805359661496, Math.toRadians(137));
+    private final Pose load3 = new Pose(9.772919605077572, 23.51763046544428, Math.toRadians(183));
+    private final Pose shoot4 = new Pose(58.82792665726376, 113.81805359661496, Math.toRadians(120));
     private final Pose finalPos = new Pose(83.78279266572639, 126.94358251057827, Math.toRadians(137));
     private PathChain driveStartShoot;
     private PathChain shootPreload;
@@ -66,6 +69,7 @@ public class Auto_BClose_ZTest extends OpMode {
     private PathChain loadShoot1;
     private PathChain shootPreload2;
     private PathChain preloadLoad2;
+    private PathChain Load2adjust;
     private PathChain LoadShoot2;
     private PathChain shootPreload3;
     private PathChain preloadLoad3;
@@ -96,6 +100,10 @@ public class Auto_BClose_ZTest extends OpMode {
         preloadLoad2 = follower.pathBuilder()
                 .addPath(new BezierLine(preload2, load2))
                 .setTangentHeadingInterpolation()
+                .build();
+        Load2adjust = follower.pathBuilder()
+                .addPath(new BezierLine(load2, loadadjust))
+                .setLinearHeadingInterpolation(load2.getHeading(), loadadjust.getHeading())
                 .build();
         LoadShoot2 = follower.pathBuilder()
                 .addPath(new BezierLine(load2, shoot3))
@@ -192,9 +200,15 @@ public class Auto_BClose_ZTest extends OpMode {
                     intake(1, 1);
                     follower.setMaxPower(0.5);
                     follower.followPath(preloadLoad2, true);
-                    setPathState(PathState.load_shoot2);
+                    setPathState(PathState.load2_loadadjust);
                 }
                 break;
+            case load2_loadadjust:
+                if(!follower.isBusy()){
+                    follower.setMaxPower(0.5);
+                    follower.followPath(Load2adjust, true);
+                    setPathState(PathState.load_shoot2);
+                }
             case load_shoot2:
                 if(!follower.isBusy()){
                     intake(0, 0);

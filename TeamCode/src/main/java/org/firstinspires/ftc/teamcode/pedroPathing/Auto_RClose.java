@@ -130,8 +130,8 @@ public class Auto_RClose extends OpMode {
 
             case shoot:
                 if (!follower.isBusy()) {
-                    Potato1.setVelocity(1200);
-                    if (Math.abs(1200 - Potato1.getVelocity()) < 10) {
+                    Potato1.setVelocity(1300);
+                    if (Math.abs(1300 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
 
                         setPathState(Auto_RClose.PathState.shoot_preload);
@@ -169,8 +169,8 @@ public class Auto_RClose extends OpMode {
 
             case shoot2:
                 if(!follower.isBusy()){
-                    Potato1.setVelocity(1200);
-                    if (Math.abs(1200 - Potato1.getVelocity()) < 10) {
+                    Potato1.setVelocity(1300);
+                    if (Math.abs(1300 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
                         setPathState(Auto_RClose.PathState.shoot_preload2);
                     }
@@ -206,8 +206,8 @@ public class Auto_RClose extends OpMode {
 
             case shoot3:
                 if(!follower.isBusy()){
-                    Potato1.setVelocity(1200);
-                    if (Math.abs(1200 - Potato1.getVelocity()) < 10) {
+                    Potato1.setVelocity(1300);
+                    if (Math.abs(1300 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
                         setPathState(Auto_RClose.PathState.shoot_preload3);
                     }
@@ -244,8 +244,8 @@ public class Auto_RClose extends OpMode {
 
             case shoot4:
                 if(!follower.isBusy()){
-                    Potato1.setVelocity(1200);
-                    if (Math.abs(1200 - Potato1.getVelocity()) < 10) {
+                    Potato1.setVelocity(1300);
+                    if (Math.abs(1300 - Potato1.getVelocity()) < 10) {
                         intake(1, 1);
                         setPathState(Auto_RClose.PathState.shoot_final);
                     }
