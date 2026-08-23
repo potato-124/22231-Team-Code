@@ -45,6 +45,21 @@ public class Hedna_Lesson extends OpMode {
 
         }
         PathState pathState;
+        private final Pose startshootpose = new Pose(20.456981664315936,22.3469675599436, Math.toRadians(140));
+    private final Pose shootpose = new Pose(43.40761636107194,99.77433004231312, Math.toRadians(140));
+    private final Pose preloadpose = new Pose(43.471086036671366,83.90973201692523,Math.toRadians(180));
+    private final Pose loadpose = new Pose(12.119887165021163,83.68406205923836, Math.toRadians(180));
+    private final Pose shootpose1 = new Pose(43.473906911142464,99.81241184767278, Math.toRadians(140));
+    private final Pose preloadpose1 = new Pose(43.222849083215806,59.35966149506348, Math.toRadians(180));
+    private final Pose loadpose1 = new Pose(11.983074753173506,59.16784203102963, Math.toRadians(180));
+    private final Pose shootpose2 = new Pose(43.210155148095915,99.5937940761636, Math.toRadians(140));
+    private final Pose preloadpose3 = new Pose(12.086036671368124,35.31452750352609, Math.toRadians(140));
+    private final Pose shootpose3 = new Pose(43.710638297872336,99.22336524322542, Math.toRadians(140));
+    private PathChain drivetoshooting;
+    private PathChain shootpreload;
+    private PathChain xx; //rename the xx just needed to remove source of error -Z
+
+
 
 
 
